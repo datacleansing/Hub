@@ -1,5 +1,5 @@
 # DataMiningCloud UI
 
-This is a light UI for the DataMiningCloud Service, including designer, repository checker and other feathers.
+This is a light UI for the DataMiningCloud Service, including designer, repository, evaluation, engine and other related functionality.
 
-Based on JQuery
+Based on JQuery + NodeJS/Express.
