@@ -1,6 +1,21 @@
 /**
- * 
+ *
  */
+
+getRepoBasePath = function()
+{
+		return "http://localhost:8080/"
+}
+
+getEvaHost = function()
+{
+		return "http://localhost:8080/"
+}
+
+getEngineHost = function()
+{
+		return "http://localhost:8080/"
+}
 
 searchSvcMetadata = function(filter, successCallback)
 {

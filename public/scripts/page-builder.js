@@ -1,33 +1,33 @@
 /**
- * 
+ *
  */
 jQuery.fn.extend({
-	
+
 	buildHeader: function(suffix)
 	{
 		$(this).append($('<p>').append(
-				$('<font>').attr("size", "40").text("DMV - " + suffix)));
+				$('<font>').attr("size", "40").text("DataMiningCloud - " + suffix)));
 		$(this).append($('<hr>'));
 	},
-	
+
 	buildFooter: function()
 	{
 		$(this).append($('<hr>'));
 	},
-	
+
 	buildPage: function(suffix, fun)
 	{
 		$.ajaxSetup({
 			  contentType: "application/json; charset=utf-8"
 			});
 
-		$.getScript('/DMCloud/scripts/data-loader.js', function(){
+		$.getScript('/scripts/data-loader.js', function(){
 			$('body').buildHeader(suffix);
 			fun();
 			$('body').buildFooter();
 		});
 	},
-	
+
 	buildModelSelector: function()
 	{
 		var searchModel = function(searchValue)
@@ -69,14 +69,14 @@ jQuery.fn.extend({
 					$('<td>').append(searchField)).append(
 					$('<td>').append(searchBtn))
 				);
-		
+
 		$(this).append(table)
 		$(this).append($('<table>').attr('id','modelSelctorTable'));
 		searchModel(null);
-		
+
 		return $(this);
 	},
-	
+
 	buildSvcSearcher: function()
 	{
 		var searchDMSvc = function(searchValue)
@@ -113,11 +113,11 @@ jQuery.fn.extend({
 					$('<td>').append(searchField)).append(
 					$('<td>').append(searchBtn))
 				);
-		
+
 		$(this).append(table)
 		$(this).append($('<table>').attr('id','mainTable'));
 		searchDMSvc(null);
-		
+
 		return $(this);
 	}
 });
