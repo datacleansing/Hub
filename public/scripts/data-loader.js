@@ -19,8 +19,8 @@ getEngineHost = function()
 
 searchSvcMetadata = function(filter, successCallback)
 {
-	 $.post(
-		"/DMCloud/rest/metadata/svc",
+	 $.get(
+		getRepoBasePath() + "/repo/svc",
 		JSON.stringify(filter),
 		successCallback);
 }

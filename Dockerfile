@@ -1,9 +1,9 @@
 FROM google/nodejs
 
-EXPOSE 80
+EXPOSE 3000
 
-RUN mkdir dmcloud_ui
-ADD . dmcloud_ui
-RUN cd dmcloud_ui
+WORKDIR /etc/services/dmcloud_ui
+ADD . .
+ENTRYPOINT ["npm", "install"]
 
 ENTRYPOINT ["npm", "start"]
