@@ -3,7 +3,10 @@ html
   head
     title= "DataMiningCloud - " + title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/jquery-ui.css')
+    script(src='scripts/jquery.js')
+    script(src='scripts/jquery-ui.js')
+    block scripts
   body
     h1= "DataMiningCloud - " + title
-    hl
     block content
