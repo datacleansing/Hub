@@ -1,0 +1,19 @@
+extends dmcloud_base
+
+block scripts
+  script(src='/scripts/repo.js')
+
+block content
+  .searcher
+    input(
+      type="text"
+      id="searchFiled"
+      value=""
+    )
+    button(
+        id="searchBtn"
+      )
+  table(
+    border='1'
+    id='repoTable'
+  )

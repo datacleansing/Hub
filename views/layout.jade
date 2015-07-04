@@ -4,14 +4,15 @@ html
     title= "DataMiningCloud - " + title
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/jquery-ui.css')
-    script(src='scripts/jquery-2.1.4.js')
-    script(src='scripts/jquery-ui.js')
+    script(src='/scripts/jquery-2.1.4.js')
+    script(src='/scripts/jquery-ui.js')
+    script(src='/scripts/data-loader.js')
     block scripts
   body
     include header.jade
     .container
-      .main-content
-        block content
       .sidebar
         block sidebar
+      .main-content
+        block content
     include footer.jade

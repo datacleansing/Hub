@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var stylus = require('stylus');
 var nib = require('nib');
 
-var dashboard = require('./routes/index');
+var dashboard = require('./routes/dashboard');
 var repo = require('./routes/repo');
 
 var app = express();

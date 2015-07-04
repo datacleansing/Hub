@@ -27,16 +27,16 @@ searchSvcMetadata = function(filter, successCallback)
 
 searchModelMetadata = function(filter, successCallback)
 {
-	 $.post(
-		"/DMCloud/rest/metadata/model",
+	 $.get(
+		getRepoBasePath() + "/repo/model",
 		JSON.stringify(filter),
 		successCallback);
 }
 
 searchArchive = function(filter, successCallback)
 {
-	 $.post(
-		"/DMCloud/rest/archive",
+	 $.get(
+		getRepoBasePath() + "/repo/archive",
 		JSON.stringify(filter),
 		successCallback);
 }
