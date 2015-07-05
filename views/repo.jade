@@ -1,4 +1,4 @@
-extends dmcloud_base
+extends repo_base
 
 block scripts
   script(src='/scripts/repo.js')
@@ -12,6 +12,7 @@ block content
     )
     button(
         id="searchBtn"
+        loaded="initSearcher()"
       )
   table(
     border='1'
