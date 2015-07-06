@@ -4,7 +4,7 @@
 
 getRepoBasePath = function()
 {
-		return "http://localhost:8080/"
+		return "http://localhost:12616/"
 }
 
 getEvaHost = function()
@@ -20,8 +20,8 @@ getEngineHost = function()
 searchSvcMetadata = function(filter, successCallback)
 {
 	 $.get(
-		getRepoBasePath() + "/repo/svc",
-		JSON.stringify(filter),
+		getRepoBasePath() + "/repo/trainers",
+		null,
 		successCallback);
 }
 
