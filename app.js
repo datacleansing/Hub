@@ -10,6 +10,9 @@ var nib = require('nib');
 
 var dashboard = require('./routes/dashboard');
 var repo = require('./routes/repo');
+var repo_svcs = require('./routes/repo_svcs');
+var repo_models = require('./routes/repo_models');
+var repo_trainers = require('./routes/repo_trainers');
 
 var app = express();
 
@@ -37,6 +40,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', dashboard);
 app.use('/repo', repo);
+app.use('/repo/svcs', repo_svcs);
+app.use('/repo/models', repo_models);
+app.use('/repo/trainers', repo_trainers);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
