@@ -1,13 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var request = require('request');
 
 /* GET public repo searcher */
 router.get('/', function(req, res, next) {
   res.render('repo', { title: 'Repository' });
-});
-/* GET users listing. */
-router.get('/svcs', function(req, res, next) {
-  res.render('repo_svcs', { title: 'My Services' });
 });
 /* GET users listing. */
 router.get('/models', function(req, res, next) {

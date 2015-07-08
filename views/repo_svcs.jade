@@ -6,8 +6,12 @@ block scripts
 block content
   p List service Here
   p For every svc, show a link
-  a(href="/repo/svcs/demoSvcKey")
   table(
     border='1'
     id='svcsTable'
   )
+    each val in items
+      tr
+        td
+          a(href= "/repo/svcs/" + val.key)
+            text= val.name
