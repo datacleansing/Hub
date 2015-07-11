@@ -2,11 +2,6 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-/* GET svc Metadata */
-router.get('/:key', function(req, res, next) {
-  res.render('repo_svcDetail', { title: 'Details' });
-});
-
 /* GET svc listing. */
 router.get('', function(req, res, next) {
 
@@ -18,6 +13,22 @@ router.get('', function(req, res, next) {
       next();
     }
   });
+});
+
+/* GET svc Metadata */
+router.get('/:key', function(req, res, next) {
+  res.render('repo_svcDetail', { title: 'Details', svcKey: req.params.key });
+});
+
+/* GET svc Metadata */
+router.get('/:key/meta', function(req, res, next) {
+  res.render('repo_svcMetadataEditor', { title: 'Edit Metadata', svcKey: req.params.key });
+});
+
+
+/* GET svc Metadata */
+router.get('/:key/designer', function(req, res, next) {
+  res.render('repo_processersEditor', { title: 'Designer', svcKey: req.params.key });
 });
 
 module.exports = router;

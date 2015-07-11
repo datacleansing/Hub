@@ -4,8 +4,14 @@ block scripts
   script(src='/scripts/repo.js')
 
 block content
-  p Model
+  p List models Here
+  p For every model, show a link
   table(
     border='1'
-    id='modelsTable'
+    id='svcsTable'
   )
+    each val in items
+      tr
+        td
+          a(href= "/repo/models/" + val.key)
+            text= val.name

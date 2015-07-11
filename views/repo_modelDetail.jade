@@ -4,4 +4,12 @@ block scripts
   script(src='/scripts/repo.js')
 
 block content
-  p Show model details here
+  ul
+    li
+      p Show metadata
+    li
+      a(href= "/repo/models/" + modelKey + "/meta") Edit metadata
+    li
+      a(href= "/repo/models/" + modelKey + "/designer")  Edit model data
+    li
+      p Check history build
