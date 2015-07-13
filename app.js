@@ -12,6 +12,7 @@ var dashboard = require('./routes/dashboard');
 var repo = require('./routes/repo');
 var repo_svcs = require('./routes/repo_svcs');
 var repo_models = require('./routes/repo_models');
+var evaluator = require('./routes/evaluator');
 
 var app = express();
 
@@ -41,6 +42,7 @@ app.use('/', dashboard);
 app.use('/repo', repo);
 app.use('/repo/svcs', repo_svcs);
 app.use('/repo/models', repo_models);
+app.use('/evaluation', evaluator);
 
 app.use(function(req, res, next) {
 
