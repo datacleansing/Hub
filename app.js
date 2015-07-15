@@ -13,6 +13,7 @@ var repo = require('./routes/repo');
 var repo_svcs = require('./routes/repo_svcs');
 var repo_models = require('./routes/repo_models');
 var evaluator = require('./routes/evaluator');
+var engine = require('./routes/engine');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use('/repo', repo);
 app.use('/repo/svcs', repo_svcs);
 app.use('/repo/models', repo_models);
 app.use('/evaluation', evaluator);
+app.use('/engine', engine);
 
 app.use(function(req, res, next) {
 

@@ -7,7 +7,7 @@ router.get('', function(req, res, next) {
 
   request('http://localhost:12616/repo/svcs', function (error, response, body) {
     if (!error && response.statusCode == 200) {
-        res.render('repo_svcs', { title: 'My Services', items: JSON.parse(body)});
+        res.render('repo/svcs', { title: 'My Services', items: JSON.parse(body)});
     }
     else {
       next();
@@ -17,18 +17,18 @@ router.get('', function(req, res, next) {
 
 /* GET svc Metadata */
 router.get('/:key', function(req, res, next) {
-  res.render('repo_svcDetail', { title: 'Details', svcKey: req.params.key });
+  res.render('repo/svcDetail', { title: 'Details', svcKey: req.params.key });
 });
 
 /* GET svc Metadata */
 router.get('/:key/meta', function(req, res, next) {
-  res.render('repo_svcMetadataEditor', { title: 'Edit Metadata', svcKey: req.params.key });
+  res.render('repo/svcMetadataEditor', { title: 'Edit Metadata', svcKey: req.params.key });
 });
 
 
 /* GET svc Metadata */
 router.get('/:key/designer', function(req, res, next) {
-  res.render('repo_processersEditor', { title: 'Designer', svcKey: req.params.key });
+  res.render('repo/processersEditor', { title: 'Designer', svcKey: req.params.key });
 });
 
 module.exports = router;

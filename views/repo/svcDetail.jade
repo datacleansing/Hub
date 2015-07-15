@@ -1,4 +1,4 @@
-extends repo_base
+extends base
 
 block scripts
   script(src='/scripts/repo.js')
@@ -13,7 +13,7 @@ block content
     li
       a(href= "/repo/svcs/" + svcKey + "/designer") Edit processers
     li
-      a(href= "/evaluation/dashboard/" + svcKey ) Evaluate the svc in the engine
+      a(href= "/evaluation/dashboard/repo/" + svcKey ) Evaluate the svc in the engine
     li
       p Publish this svc to the archives
     li

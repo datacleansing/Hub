@@ -7,7 +7,7 @@ router.get('', function(req, res, next) {
 
   request('http://localhost:12616/repo/models', function (error, response, body) {
     if (!error && response.statusCode == 200) {
-        res.render('repo_models', { title: 'My Services', items: JSON.parse(body)});
+        res.render('repo/models', { title: 'My Services', items: JSON.parse(body)});
     }
     else {
       next();
@@ -17,18 +17,18 @@ router.get('', function(req, res, next) {
 
 /* GET model detail */
 router.get('/:key', function(req, res, next) {
-  res.render('repo_modelDetail', { title: 'Details', modelKey: req.params.key });
+  res.render('repo/modelDetail', { title: 'Details', modelKey: req.params.key });
 });
 
 /* GET model Metadata */
 router.get('/:key/meta', function(req, res, next) {
-  res.render('repo_modelMetadataEditor', { title: 'Edit Metadata', modelKey: req.params.key });
+  res.render('repo/modelMetadataEditor', { title: 'Edit Metadata', modelKey: req.params.key });
 });
 
 
 /* GET model Metadata */
 router.get('/:key/designer', function(req, res, next) {
-  res.render('repo_modelEditor', { title: 'Designer', modelKey: req.params.key });
+  res.render('repo/modelEditor', { title: 'Designer', modelKey: req.params.key });
 });
 
 module.exports = router;
