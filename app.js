@@ -42,9 +42,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', dashboard);
 app.use('/repo', repo);
 app.use('/repo/svcs', repo_svcs);
-app.use('/repo/models', repo_models);
-app.use('/evaluation', evaluator);
-app.use('/engine', engine);
+//app.use('/repo/models', repo_models);
+//app.use('/evaluation', evaluator);
+//app.use('/engine', engine);
 
 app.use(function(req, res, next) {
 

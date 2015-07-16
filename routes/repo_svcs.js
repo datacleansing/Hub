@@ -16,18 +16,24 @@ router.get('', function(req, res, next) {
 });
 
 /* GET svc Metadata */
-router.get('/:key', function(req, res, next) {
+router.get('/summary/:key', function(req, res, next) {
   res.render('repo/svcDetail', { title: 'Details', svcKey: req.params.key });
 });
 
 /* GET svc Metadata */
-router.get('/:key/meta', function(req, res, next) {
-  res.render('repo/svcMetadataEditor', { title: 'Edit Metadata', svcKey: req.params.key });
+router.get('/meta/:key', function(req, res, next) {
+  var isNew = req.params.key == "new";
+  res.render(
+    'repo/svcMetadataEditor',
+    {
+      title: isNew ? 'Create New Service' : 'Edit Metadata',
+      svcKey: req.params.key
+    });
 });
 
 
 /* GET svc Metadata */
-router.get('/:key/designer', function(req, res, next) {
+router.get('/designer/:key', function(req, res, next) {
   res.render('repo/processersEditor', { title: 'Designer', svcKey: req.params.key });
 });
 
