@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-/* GET Evaluation for the processer listing. */
+/*
 router.get('/dashboard/:catalog/:svcKey', function(req, res, next) {
   res.render(
     'eva/dashboard',
@@ -13,19 +13,6 @@ router.get('/dashboard/:catalog/:svcKey', function(req, res, next) {
     });
 });
 
-/* GET Evaluation for the processer. */
-router.get('/processer/:catalog/:svcKey/:evaKey', function(req, res, next) {
-    res.render(
-      'eva/processerDetail',
-      {
-        title:  "Evaluation as a processer",
-        catalog: req.params.catalog,
-        svcKey: req.params.svcKey,
-        evaKey: req.params.evaKey
-      });
-});
-
-/* GET Evaluation. */
 router.get('/trainer/:catalog/:svcKey/:evaKey', function(req, res, next) {
     res.render(
       'eva/trainerDetail',
@@ -37,7 +24,6 @@ router.get('/trainer/:catalog/:svcKey/:evaKey', function(req, res, next) {
       });
 });
 
-/* GET Evaluation for the processer listing. */
 router.get('/processer/:catalog/:svcKey', function(req, res, next) {
     res.render(
       'eva/processerEditor',
@@ -48,7 +34,6 @@ router.get('/processer/:catalog/:svcKey', function(req, res, next) {
       });
 });
 
-/* GET Evaluation listing. */
 router.get('/trainer/:catalog/:svcKey', function(req, res, next) {
     res.render(
       'eva/trainerEditor',
@@ -56,6 +41,30 @@ router.get('/trainer/:catalog/:svcKey', function(req, res, next) {
         title:  "Create a evaluation as a model trainer",
         catalog: req.params.catalog,
         svcKey: req.params.svcKey
+      });
+});
+
+*/
+
+router.get('/processer/:catalog/:svcKey/new', function(req, res, next) {
+    res.render(
+      'eva/processerEditor',
+      {
+        title:  "Create a evaluation as a processer",
+        catalog: req.params.catalog,
+        svcKey: req.params.svcKey,
+        evaKey: req.params.evaKey
+      });
+});
+
+router.get('/processer/:catalog/:svcKey/:evaKey', function(req, res, next) {
+    res.render(
+      'eva/processerDetail',
+      {
+        title:  "Evaluation as a processer",
+        catalog: req.params.catalog,
+        svcKey: req.params.svcKey,
+        evaKey: req.params.evaKey
       });
 });
 
