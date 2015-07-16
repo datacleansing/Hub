@@ -10,7 +10,7 @@ var nib = require('nib');
 
 var dashboard = require('./routes/dashboard');
 var repo = require('./routes/repo');
-var repo_svcs = require('./routes/repo_svcs');
+var repo_jobs = require('./routes/repo_jobs');
 var repo_models = require('./routes/repo_models');
 var evaluator = require('./routes/evaluator');
 var engine = require('./routes/engine');
@@ -32,27 +32,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(stylus.middleware(
-  { src: __dirname + '/public'
-  , compile: compile
-  }
-))
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', dashboard);
-//app.use('/repo', repo);
-//app.use('/repo/svcs', repo_svcs);
-//app.use('/repo/models', repo_models);
-//app.use('/evaluation', evaluator);
-//app.use('/engine', engine);
 
 app.use(function(req, res, next) {
 
   //to allow cross domain requests to send cookie information.
-  res.header('Access-Control-Allow-Credentials', true);
+  //res.header('Access-Control-Allow-Credentials', true);
 
   // origin can not be '*' when crendentials are enabled. so need to set it to the request origin
-  res.header('Access-Control-Allow-Origin',  req.headers.origin);
+  res.header('Access-Control-Allow-Origin',  '*');
 
   // list of methods that are supported by the server
   res.header('Access-Control-Allow-Methods','OPTIONS,GET,PUT,POST,DELETE');
@@ -61,6 +49,20 @@ app.use(function(req, res, next) {
 
   next();
 });
+
+app.use(stylus.middleware(
+  { src: __dirname + '/public'
+  , compile: compile
+  }
+))
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', dashboard);
+app.use('/repo', repo);
+app.use('/repo/jobs', repo_jobs);
+app.use('/repo/models', repo_models);
+//app.use('/evaluation', evaluator);
+app.use('/engine', engine);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
