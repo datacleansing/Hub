@@ -40,8 +40,8 @@ app.use(stylus.middleware(
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', dashboard);
-app.use('/repo', repo);
-app.use('/repo/svcs', repo_svcs);
+//app.use('/repo', repo);
+//app.use('/repo/svcs', repo_svcs);
 //app.use('/repo/models', repo_models);
 //app.use('/evaluation', evaluator);
 //app.use('/engine', engine);
