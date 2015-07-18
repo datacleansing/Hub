@@ -1,10 +1,21 @@
 extends base
 
-block content
-  #evaData
-    p Select Evaluation dataset, input the data by uploading the data.
-  #expectAttribute
-    p Select the expected attribute, this is not a require field.
+block scripts
+  script(src='/scripts/evaProcesserEditor.js')
 
-  #buttons
-    p Launch the evalution button
+block content
+  .searcher
+    text Select Evaluation dataset:
+      input(
+        type="file"
+        id="searchFiled"
+        value=""
+      )
+    br
+    text Select the expected attribute, this is not a require field.
+    br
+    br
+    br
+    button(
+        id="launchBtn"
+      )
