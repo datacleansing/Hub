@@ -2,13 +2,14 @@ extends base
 
 block scripts
   script(src='/scripts/evaProcesserEditor.js')
+  script(type='javascript')
 
 block content
   .searcher
     text Select Evaluation dataset:
       input(
         type="file"
-        id="searchFiled"
+        id="file"
         value=""
       )
     br
@@ -16,6 +17,6 @@ block content
     br
     br
     br
-    button(
-        id="launchBtn"
-      )
+    button(id="launchBtn")
+    br
+    button(id="loadBtn")
