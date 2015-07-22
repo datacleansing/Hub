@@ -5,18 +5,20 @@ block scripts
   script(type='javascript')
 
 block content
-  .searcher
+  button(id="launchBtn")
+  br
+  br
+  br
+  .dataChooser
     text Select Evaluation dataset:
-      input(
-        type="file"
-        id="file"
-        value=""
-      )
     br
-    text Select the expected attribute, this is not a require field.
-    br
-    br
-    br
-    button(id="launchBtn")
-    br
+    input(
+      type="file"
+      id="file"
+      value=""
+    )
     button(id="loadBtn")
+    br
+    //text Select the expected attribute, this is not a require field.
+    br
+    #dataPreview
