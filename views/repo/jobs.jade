@@ -5,13 +5,13 @@ block scripts
 
 block content
   p List service Here
-  p For every svc, show a link
+  p For every job, show a link
   table(
     border='1'
-    id='svcsTable'
+    id='jobsTable'
   )
     each val in items
       tr
         td
-          a(href= "/repo/svcs/summary/" + val.key)
+          a(href= "/repo/jobs/summary/" + val.key)
             text= val.name

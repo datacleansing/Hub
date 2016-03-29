@@ -4,12 +4,10 @@ var request = require('request');
 
 /* GET model listing. */
 router.get('', function(req, res, next) {
-
   request('http://localhost:12616/repo/models', function (error, response, body) {
     if (!error && response.statusCode == 200) {
         res.render('repo/models', { title: 'My Services', items: JSON.parse(body)});
-    }
-    else {
+    }else {
       next();
     }
   });

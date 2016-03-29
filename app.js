@@ -10,7 +10,7 @@ var nib = require('nib');
 
 var dashboard = require('./routes/dashboard');
 var repo = require('./routes/repo');
-var repo_svcs = require('./routes/repo_svcs');
+var repo_jobs = require('./routes/repo_jobs');
 var repo_models = require('./routes/repo_models');
 var evaluator = require('./routes/evaluator');
 var engine = require('./routes/engine');
@@ -58,11 +58,11 @@ app.use(stylus.middleware(
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', dashboard);
-//app.use('/repo', repo);
-//app.use('/repo/svcs', repo_svcs);
-//app.use('/repo/models', repo_models);
-app.use('/evaluation', evaluator);
-//app.use('/engine', engine);
+app.use('/repo', repo);
+app.use('/repo/jobs', repo_jobs);
+app.use('/repo/models', repo_models);
+//app.use('/evaluation', evaluator);
+app.use('/engine', engine);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
