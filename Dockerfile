@@ -2,8 +2,8 @@ FROM google/nodejs
 
 EXPOSE 3000
 
-WORKDIR /etc/services/dmcloud_ui
-ADD . .
-RUN ["npm", "install"]
+# Copy application code.
+    COPY . /app/
 
-ENTRYPOINT ["npm", "start"]
+    # Install dependencies.
+    RUN npm --unsafe-perm install
