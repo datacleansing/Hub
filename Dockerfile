@@ -1,9 +1,9 @@
 FROM google/nodejs
 
-EXPOSE 3000
+EXPOSE 8080
 
 # Copy application code.
-    COPY . /app/
+COPY . /app/
 
-    # Install dependencies.
-    RUN npm --unsafe-perm install
+# Install dependencies.
+RUN npm --unsafe-perm install
