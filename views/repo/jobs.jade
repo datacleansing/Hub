@@ -5,7 +5,6 @@ block scripts
 
 block content
   p List service Here
-  p For every job, show a link
   table(
     border='1'
     id='jobsTable'
@@ -13,5 +12,5 @@ block content
     each val in items
       tr
         td
-          a(href= "/repo/jobs/summary/" + val.key)
+          a(href= "/ui/repo/jobs/" + val.key)
             text= val.name

@@ -12,8 +12,10 @@ var dashboard = require('./routes/dashboard');
 var repo = require('./routes/repo');
 var repo_jobs = require('./routes/repo_jobs');
 var repo_models = require('./routes/repo_models');
+var repo_archives = require('./routes/repo_archives');
 var evaluator = require('./routes/evaluator');
 var engine = require('./routes/engine');
+var proxy = require('./routes/proxy');
 
 var app = express();
 
@@ -58,11 +60,13 @@ app.use(stylus.middleware(
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', dashboard);
-app.use('/repo', repo);
-app.use('/repo/jobs', repo_jobs);
-app.use('/repo/models', repo_models);
+app.use('/ui/repo', repo);
+app.use('/ui/repo/jobs', repo_jobs);
+app.use('/ui/repo/models', repo_models);
+app.use('/ui/repo/archives', repo_archives);
 //app.use('/evaluation', evaluator);
-app.use('/engine', engine);
+app.use('/ui/engine', engine);
+app.use('/ui/proxy', proxy);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

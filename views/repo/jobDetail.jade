@@ -7,14 +7,8 @@ block content
     li
       p Show metadata
     li
-      a(href= "/repo/jobs/meta/" + svcKey ) Edit metadata
+      a(href= "/ui/repo/jobs/" + jobKey + "/meta") Edit metadata
     li
-      p Show processes
+      a(href= "/ui/repo/jobs/" + jobKey + "/editor") Edit job
     li
-      a(href= "/repo/jobs/designer/" + svcKey ) Edit job
-    li
-      a(href= "/evaluation/dashboard/repo/" + svcKey ) Evaluate the job in the engine
-    li
-      p Publish this job to the archives
-    li
-      p Deploy the job to the engine
+      a(href= "/ui/repo/jobs/" + modelKey + "/archives")  Check model archives

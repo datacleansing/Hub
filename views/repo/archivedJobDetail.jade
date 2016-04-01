@@ -1,0 +1,20 @@
+extends base
+
+block scripts
+  script(src='/scripts/repo.js')
+
+block content
+  p *name
+  p description
+  p tags
+  p *type(Trainer or Common Processer, RadioButton)
+  p catalog(text input, will be a selector?)
+  p domain(text input, will be a selector?)
+  p input (Attributes editor)
+  p output (Attributes editor)
+
+  ul
+    li
+      a(href= "/ui/repo/archives/job/" + jobKey + "/flow")  Deploy as Flow
+    li
+      a(href= "/ui/repo/archives/job/" + jobKey + "/service")  Publish as Service

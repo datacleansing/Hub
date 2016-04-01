@@ -1,13 +1,13 @@
 extends base
 
 block content
-  p List flows Here
+  p List services Here
   table(
     border='1'
-    id='flowsTable'
+    id='servicesTable'
   )
     each val in items
       tr
         td
-          a(href= "/ui/flows/" + val.key)
+          a(href= "/ui/services/" + val.key)
             text= val.name

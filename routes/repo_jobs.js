@@ -16,12 +16,12 @@ router.get('', function(req, res, next) {
 });
 
 /* GET job Metadata */
-router.get('/summary/:key', function(req, res, next) {
+router.get('/:key', function(req, res, next) {
   res.render('repo/jobDetail', { title: 'Details', jobKey: req.params.key });
 });
 
 /* GET job Metadata */
-router.get('/meta/:key', function(req, res, next) {
+router.get('/:key/meta', function(req, res, next) {
   var isNew = req.params.key == "new";
   res.render(
     'repo/jobMetadataEditor',
@@ -31,10 +31,19 @@ router.get('/meta/:key', function(req, res, next) {
     });
 });
 
-
 /* GET job Metadata */
-router.get('/designer/:key', function(req, res, next) {
+router.get('/:key/editor', function(req, res, next) {
   res.render('repo/jobsEditor', { title: 'Designer', jobKey: req.params.key });
+});
+
+router.get('/:key/archives', function(req, res, next) {
+  request('http://localhost:12616/repo/models', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        res.render('repo/jobArchives', { title: 'Archives', items: JSON.parse(body)});
+    }else {
+      next();
+    }
+  });
 });
 
 module.exports = router;

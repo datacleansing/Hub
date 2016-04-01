@@ -2,16 +2,14 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-/* GET engine dashboard */
 router.get('', function(req, res, next) {
-  res.render('engine/flows', { title: 'Flows' });
+  res.render('proxy/servicess', { title: 'servicess' });
 });
 
 
-/* Search flows in whole engine */
 router.get('/:key', function(req, res, next) {
-  res.render('engine/flowDetails', {
-    title: 'Flow Details',
+  res.render('proxy/servicesDetails', {
+    title: 'Services Details',
     key: req.params.key
   });
 });
