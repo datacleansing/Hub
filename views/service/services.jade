@@ -1,0 +1,14 @@
+extends base
+
+block content
+  p Create Service
+  p List services Here
+  table(
+    border='1'
+    id='servicesTable'
+  )
+    each val in items
+      tr
+        td
+          a(href= "/ui/services/" + val.key)
+            text= val.name

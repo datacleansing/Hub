@@ -4,7 +4,7 @@ block scripts
   script(src='/scripts/repo.js')
 
 block content
-  p List service Here
+  p List jobs here
   table(
     border='1'
     id='jobsTable'
@@ -12,5 +12,5 @@ block content
     each val in items
       tr
         td
-          a(href= "/ui/repo/jobs/" + val.key)
-            text= val.name
+          a(href= "/ui/jobs/" + val.key)
+            text= "Job: " + val.name

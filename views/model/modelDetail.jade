@@ -1,0 +1,15 @@
+extends base
+
+block scripts
+  script(src='/scripts/repo.js')
+
+block content
+  ul
+    li
+      p Show metadata
+    li
+      a(href= "/ui/models/" + modelKey + "/meta") Edit metadata
+    li
+      a(href= "/ui/models/" + modelKey + "/editor")  Edit model data
+    li
+      a(href= "/ui/models/" + modelKey + "/archives")  Check model archives
