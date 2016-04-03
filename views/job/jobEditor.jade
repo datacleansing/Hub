@@ -1,10 +1,19 @@
 extends base
 
 block scripts
-  script(src='/scripts/repo.js')
+  link(rel='stylesheet', href='/stylesheets/editor.css')
+  script(src='/scripts/ace/ace.js')
+  script(src='/scripts/editorCommon.js')
+  script(src='/scripts/jobJsonEditor.js')
 
 block content
-  p Add processer
-  p Delete processer
-  p Change the order of the processer
-  p Edit processer's model, from archive, repo, import from file, ReST data.
+    #submitBtn
+    #delBtn
+    input(
+      id='delConfirmField'
+      onfocus="if (this.value=='Input current ID to delete') this.value = ''"
+      type="text"
+      value= "Input current ID to delete"
+      )
+    #editor
+      = JSON.stringify(data)

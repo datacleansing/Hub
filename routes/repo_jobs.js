@@ -33,7 +33,11 @@ router.get('/:key/meta', function(req, res, next) {
 
 /* GET job Metadata */
 router.get('/:key/editor', function(req, res, next) {
-  res.render('job/jobsEditor', { title: 'Designer', jobKey: req.params.key });
+  res.render('job/jobEditor', { title: 'Designer', jobKey: req.params.key, data:
+    {
+        "name" : "Summer"
+    }
+    });
 });
 
 router.get('/:key/archives', function(req, res, next) {
