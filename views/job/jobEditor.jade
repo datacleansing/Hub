@@ -7,13 +7,6 @@ block scripts
   script(src='/scripts/jobJsonEditor.js')
 
 block content
-    #submitBtn
-    #delBtn
-    input(
-      id='delConfirmField'
-      onfocus="if (this.value=='Input current ID to delete') this.value = ''"
-      type="text"
-      value= "Input current ID to delete"
-      )
-    #editor
-      = JSON.stringify(data)
+  #submitBtn
+  #editor
+    = JSON.stringify(data)

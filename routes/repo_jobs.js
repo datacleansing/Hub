@@ -27,16 +27,23 @@ router.get('/:key/meta', function(req, res, next) {
     'job/jobMetadataEditor',
     {
       title: isNew ? 'Create New Job' : 'Edit Metadata',
-      jobKey: req.params.key
+      jobKey: req.params.key,
+      data:
+          {
+              "name" : "Summer"
+          }
     });
 });
 
 /* GET job Metadata */
 router.get('/:key/editor', function(req, res, next) {
-  res.render('job/jobEditor', { title: 'Designer', jobKey: req.params.key, data:
-    {
-        "name" : "Summer"
-    }
+  res.render('job/jobEditor', {
+    title: 'Designer',
+    jobKey: req.params.key,
+    data:
+        {
+            "name" : "Summer"
+        }
     });
 });
 

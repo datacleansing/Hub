@@ -24,4 +24,23 @@ $(document).ready(function() {
           }
         });
   });
+  $('#delBtn').button().
+    text("DELETE ITEM").
+    click(function() {
+      var confirmCode = $('#delConfirmField').val();
+      if(dataId != confirmCode){
+        alert("Confirm code is different with current ID, please check it.")
+      }
+      else{
+        $.ajax(
+          {
+            url: "/" + dataId + "/data",
+            type: 'DELETE',
+            success: function(result) {
+                alert("Deleted");
+                window.location.replace("/")
+            }
+        });
+      }
+    });
 });

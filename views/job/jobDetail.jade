@@ -12,3 +12,11 @@ block content
       a(href= "/ui/jobs/" + jobKey + "/editor") Edit job
     li
       a(href= "/ui/jobs/" + modelKey + "/archives")  Check model archives
+
+    #delBtn
+    input(
+      id='delConfirmField'
+      onfocus="if (this.value=='Input current ID to delete') this.value = ''"
+      type="text"
+      value= "Input current ID to delete"
+    )
