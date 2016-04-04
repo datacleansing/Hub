@@ -4,12 +4,11 @@ block scripts
   link(rel='stylesheet', href='/stylesheets/editor.css')
   script(src='/scripts/ace/ace.js')
   script(src='/scripts/editorCommon.js')
-  script(src='/scripts/jobJsonEditor.js')
+  script(src='/scripts/jobMetaJsonEditor.js')
 
 block content
   #submitBtn
   #editor
-    = JSON.stringify(data)
 
   p *name
   p description

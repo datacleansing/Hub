@@ -4,8 +4,9 @@ block scripts
   link(rel='stylesheet', href='/stylesheets/editor.css')
   script(src='/scripts/ace/ace.js')
   script(src='/scripts/editorCommon.js')
-  script(src='/scripts/modelJsonEditor.js')
+  script(src='/scripts/publishJobJsonEditor.js')
 
 block content
   #submitBtn
   #editor
+    = JSON.stringify(data)

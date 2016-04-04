@@ -1,12 +1,10 @@
 
 $(document).ready(function() {
-  var dataId = "1";
-
   var editor  = initEditor();
   formatJsonEditor(editor);
 
   $('#submitBtn').button().
-  text("Update data").
+  text("Publish").
   click(function() {
     $.post(
         '/' + dataId + "/data/raw",

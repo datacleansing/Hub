@@ -7,6 +7,7 @@ router.get('', function(req, res, next) {
     if (!error && response.statusCode == 200) {
         res.render('model/models', { title: 'Models', items: JSON.parse(body)});
     }else {
+      console.log("Failed to fetch job list for " + JSON.stringify(error));
       next();
     }
   });
@@ -17,7 +18,13 @@ router.get('/:key', function(req, res, next) {
 });
 
 router.get('/:key/meta', function(req, res, next) {
-  res.render('model/modelMetadataEditor', { title: 'Edit Metadata', modelKey: req.params.key });
+  res.render('model/modelMetadataEditor',
+  {
+    title: 'Edit Metadata',
+    modelKey: req.params.key,
+    data: {
+      name: "meta"
+    }});
 });
 
 

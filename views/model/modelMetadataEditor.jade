@@ -1,9 +1,14 @@
 extends base
 
 block scripts
-  script(src='/scripts/repo.js')
+  link(rel='stylesheet', href='/stylesheets/editor.css')
+  script(src='/scripts/ace/ace.js')
+  script(src='/scripts/editorCommon.js')
+  script(src='/scripts/modelMetaJsonEditor.js')
 
 block content
+  #submitBtn
+  #editor
   ul
     li
       p name
