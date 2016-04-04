@@ -1,27 +1,15 @@
 
 $(document).ready(function() {
-  var dataId = "1";
-
-  var editor  = initEditor();
-  formatJsonEditor(editor);
-
-  $('#submitBtn').button().
-  text("Update data").
-  click(function() {
-    $.post(
-        '/' + dataId + "/data/raw",
-        {
-          raw: editor.getSession().getValue()
-        })
-        .done(function(data) {
-            alert("Date has been updated");
-        })
-        .fail(function(data) {
-          if(data != null && data.status == 400){
-            alert("Data format error, please check your content.");
-          }else {
-            alert(JSON.stringify(data));
-          }
-        });
-  });
+  var modelId = window.location.pathname.substr(11, window.location.pathname.indexOf("/meta") - 11);
+  var isCreateMode = modelId.length == 0;
+  var url = dmcloud_repo_baseModelUrl;
+  if(!isCreateMode)
+    url = url + modelId;
+  var label = isCreateMode ? "Create Model" : "Update Model Metadata";
+  var defaultData = {
+    "name": "Model Name",
+    "domain": "Undefine",
+    "locale": "zh"
+  };
+  initEditorUI(label, url, defaultData, isCreateMode);
 });

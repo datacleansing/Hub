@@ -13,6 +13,10 @@ router.get('', function(req, res, next) {
   });
 });
 
+router.get('/new', function(req, res, next) {
+  res.render('model/modelMetadataEditor', { title: 'Create Model', modelKey: null });
+});
+
 router.get('/:key', function(req, res, next) {
   res.render('model/modelDetail', { title: 'Details', modelKey: req.params.key });
 });

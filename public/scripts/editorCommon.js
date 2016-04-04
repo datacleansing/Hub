@@ -9,8 +9,48 @@ function initEditor(sId){
 
 function formatJsonEditor(editor, val){
   if(val){
-    var o = JSON.parse(val);
-    val = JSON.stringify(o, null, 4);
-    editor.getSession().setValue(val);
+    var o = JSON.stringify(val, null, 4);
+    editor.getSession().setValue(o);
+  }
+}
+
+function initEditorUI(updateLabel, url, defaultData, isCreateMode){
+  var editor  = initEditor();
+  if(defaultData){
+    formatJsonEditor(editor, defaultData);
+  }
+
+  $('#submitBtn').button().
+  text(updateLabel).
+  click(function() {
+    var foo = isCreateMode ? $.post : $.put;
+    foo(
+      url,
+      {
+        data: editor.getSession().getValue()
+      })
+      .done(function(data) {
+          alert("Date has been updated");
+      })
+      .fail(function(data) {
+        if(data != null && data.status == 400){
+          alert("Data format error, please check your content.");
+        }else {
+          alert(JSON.stringify(data));
+        }
+      }
+    );
+  });
+
+  if(!isCreateMode){
+    $.get(
+      url
+    ).done(function(data){
+      formatJsonEditor(editor, data)
+    }).fail(function(err){
+      formatJsonEditor(editor, {
+        "error" : err
+      })
+    });
   }
 }
