@@ -1,7 +1,7 @@
 
 $(document).ready(function() {
 
-  var modelId = window.location.pathname.substr(1, window.location.pathname.indexOf("/editor") - 1);
+  var modelId = window.location.pathname.substr(11, window.location.pathname.indexOf("/editor") - 11);
 
   var modelDataUrl = dmcloud_repo_baseModelUrl + "" + modelId + "/content";
   //formatJsonEditor(editor);
@@ -13,7 +13,7 @@ $(document).ready(function() {
     $.put(
       modelDataUrl,
       {
-        raw: editor.getSession().getValue()
+        data: editor.getSession().getValue()
       })
       .done(function(data) {
           alert("Date has been updated");
@@ -31,8 +31,10 @@ $(document).ready(function() {
   $.get(
     modelDataUrl
   ).done(function(data){
-
-  }).fail(function(data){
-
+    formatJsonEditor(editor, JSON.stringify(data))
+  }).fail(function(err){
+    formatJsonEditor(editor, {
+      "error" : err
+    })
   })
 });
