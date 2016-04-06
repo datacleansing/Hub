@@ -9,8 +9,8 @@ block content
     border='1'
     id='modelsTable'
   )
-    each val in items
+    each val in models
       tr
         td
-          a(href= "/ui/models/" + val.key)
-            text= val.name
+          a(href= "/ui/models/" + val._id)
+            text= val.metadata.name

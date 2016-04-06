@@ -11,5 +11,5 @@ $(document).ready(function() {
     "domain": "Undefine",
     "locale": "zh"
   };
-  initEditorUI(label, url, defaultData, isCreateMode);
+  initEditorUI(label, url, "metadata", defaultData, isCreateMode);
 });

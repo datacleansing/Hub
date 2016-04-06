@@ -14,20 +14,22 @@ function formatJsonEditor(editor, val){
   }
 }
 
-function initEditorUI(updateLabel, url, defaultData, isCreateMode){
+function initEditorUI(updateLabel, url, dataField, defaultData, isCreateMode){
   var editor  = initEditor();
   if(defaultData){
     formatJsonEditor(editor, defaultData);
   }
+  var dataField = dataField ? dataField : "data";
 
   $('#submitBtn').button().
   text(updateLabel).
   click(function() {
-    var foo = isCreateMode ? $.post : $.put;
-    foo(
-      url,
-      {
-        data: editor.getSession().getValue()
+    var method = isCreateMode ? "post" : "put";
+    var payload = {};
+    payload[dataField] = editor.getSession().getValue();
+    $.ajax(url, {
+      "method": method,
+      "data": payload
       })
       .done(function(data) {
           alert("Date has been updated");
