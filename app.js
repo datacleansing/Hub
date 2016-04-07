@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var stylus = require('stylus');
 var nib = require('nib');
 
-var dashboard = require('./routes/dashboard');
+var index = require('./routes/index');
 var repo_jobs = require('./routes/repo_jobs');
 var repo_models = require('./routes/repo_models');
 var repo_archives = require('./routes/repo_archives');
@@ -22,6 +22,10 @@ function compile(str, path) {
     .set('filename', path)
     .use(nib())
 }
+dmcloud = {};
+dmcloud.repo = {};
+dmcloud.repo.baseUrl = process.env.DMCLOUD_REPO_URL ? rocess.env.DMCLOUD_REPO_URL : "http://localhost:12616/repo/";
+dmcloud.repo.modelUrl = dmcloud.repo.baseUrl + "models/"
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -57,7 +61,7 @@ app.use(stylus.middleware(
 ))
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', dashboard);
+app.use('/', index);
 app.use('/ui/jobs', repo_jobs);
 app.use('/ui/models', repo_models);
 app.use('/ui/archives', repo_archives);

@@ -16,7 +16,10 @@ function formatJsonEditor(editor, val){
 
 function initEditorUI(updateLabel, url, dataField, defaultData, isCreateMode){
   var editor  = initEditor();
-  if(defaultData){
+  var initValue = editor.getSession().getValue();
+  if(initValue){
+    formatJsonEditor(editor, initValue);
+  }else if(defaultData){
     formatJsonEditor(editor, defaultData);
   }
   var dataField = dataField ? dataField : "data";
@@ -43,16 +46,4 @@ function initEditorUI(updateLabel, url, dataField, defaultData, isCreateMode){
       }
     );
   });
-
-  if(!isCreateMode){
-    $.get(
-      url
-    ).done(function(data){
-      formatJsonEditor(editor, data)
-    }).fail(function(err){
-      formatJsonEditor(editor, {
-        "error" : err
-      })
-    });
-  }
 }
