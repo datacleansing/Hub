@@ -4,12 +4,27 @@ block scripts
   script(src='/scripts/repo.js')
 
 block content
+  table
+    tr
+      td
+        p Name:
+      td
+        p= model.metadata.name
+    tr
+      td
+        p Domain:
+      td
+        p= model.metadata.domain
+    tr
+      td
+        p Locale:
+      td
+        p= model.metadata.locale
+
   ul
     li
-      p Show metadata
+      a(href= "/ui/models/" + model._id + "/meta") Edit metadata
     li
-      a(href= "/ui/models/" + modelKey + "/meta") Edit metadata
+      a(href= "/ui/models/" + model._id + "/editor")  Edit model data
     li
-      a(href= "/ui/models/" + modelKey + "/editor")  Edit model data
-    li
-      a(href= "/ui/models/" + modelKey + "/archives")  Check model archives
+      a(href= "/ui/models/" + model._id + "/archives")  Check model archives

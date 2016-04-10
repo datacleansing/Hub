@@ -17,15 +17,30 @@ router.get('/new', function(req, res, next) {
   res.render('model/modelMetadataEditor', { title: 'Create Model', modelKey: null });
 });
 
+router.all("/:key*", function(req, res, next){
+  request(dmcloud.repo.modelUrl + req.params.key, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      req.dataObj = JSON.parse(body);
+      next();
+    }else {
+      res.sendStatus(404);
+    }
+  });
+});
+
 router.get('/:key', function(req, res, next) {
-  res.render('model/modelDetail', { title: 'Details', modelKey: req.params.key });
+  res.render('model/modelDetail',
+  {
+    title: 'Details for ' + req.dataObj.metadata.name,
+    model: req.dataObj
+  });
 });
 
 router.get('/:key/meta', function(req, res, next) {
   res.render('model/modelMetadataEditor',
   {
-    title: 'Edit Metadata',
-    modelKey: req.params.key
+    title: 'Edit Metadata of ' + req.dataObj.metadata.name,
+    model: req.dataObj
   });
 });
 
@@ -34,7 +49,7 @@ router.get('/:key/editor', function(req, res, next) {
   res.render('model/modelEditor',
   {
     title: 'Designer',
-    modelKey: req.params.key
+    model: req.dataObj
   });
 });
 
