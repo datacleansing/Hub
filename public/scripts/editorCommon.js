@@ -9,12 +9,19 @@ function initEditor(sId){
 
 function formatJsonEditor(editor, val){
   if(val){
-    var o = JSON.stringify(val, null, 4);
+    var o = JSON.stringify(JSON.parse(val), null, 4);
     editor.getSession().setValue(o);
   }
 }
 
-function initEditorUI(updateLabel, url, dataField, defaultData, isCreateMode){
+function initEditorUI(
+    updateLabel,
+    url,
+    dataField,
+    defaultData,
+    isCreateMode,
+    dataUpdateSuccessCallback,
+    dataUpdateErrorCallback){
   var editor  = initEditor();
   var initValue = editor.getSession().getValue();
   if(initValue){
@@ -27,7 +34,7 @@ function initEditorUI(updateLabel, url, dataField, defaultData, isCreateMode){
   $('#submitBtn').button().
   text(updateLabel).
   click(function() {
-    var method = isCreateMode ? "post" : "put";
+    var method = isCreateMode === true ? "post" : "put";
     var payload = {};
     payload[dataField] = editor.getSession().getValue();
     $.ajax(url, {
@@ -35,13 +42,19 @@ function initEditorUI(updateLabel, url, dataField, defaultData, isCreateMode){
       "data": payload
       })
       .done(function(data) {
-          alert("Date has been updated");
+          console.log("Date has been updated");
+          if(typeof dataUpdateSuccessCallback == 'function'){
+            dataUpdateSuccessCallback(data);
+          }
       })
-      .fail(function(data) {
-        if(data != null && data.status == 400){
-          alert("Data format error, please check your content.");
+      .fail(function(error) {
+        if(error != null && error.status == 400){
+          console.log("Data format error, please check your content.");
         }else {
-          alert(JSON.stringify(data));
+          console.log(JSON.stringify(error));
+          if(typeof dataUpdateSuccessCallback == 'function'){
+            dataUpdateErrorCallback(error);
+          }
         }
       }
     );

@@ -40,16 +40,22 @@ router.get('/:key/meta', function(req, res, next) {
   res.render('model/modelMetadataEditor',
   {
     title: 'Edit Metadata of ' + req.dataObj.metadata.name,
-    model: req.dataObj
+    content: JSON.stringify(req.dataObj.metadata)
   });
 });
 
-
 router.get('/:key/editor', function(req, res, next) {
-  res.render('model/modelEditor',
-  {
-    title: 'Designer',
-    model: req.dataObj
+  request(dmcloud.repo.modelUrl + req.params.key + "/content", function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var modelData = JSON.parse(body);
+      res.render('model/modelEditor',
+      {
+        "title": 'Designer of ' + req.dataObj.metadata.name,
+        "content": JSON.stringify(modelData.content)
+      });
+    }else {
+      res.sendStatus(404);
+    }
   });
 });
 
