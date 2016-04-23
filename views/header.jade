@@ -1,22 +1,25 @@
-.jumbotron
+.container
   nav(class="navbar navbar-inverse navbar-fixed-top")
-    .container
+    container-fluid
       .navbar-header
         button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
           span(class="sr-only") Toggle navigation
           span(class="icon-bar")
           span(class="icon-bar")
           span(class="icon-bar")
-        a(class="navbar-brand" href="#") Data Cleansing Cloud
+        .navbar-brand Data Cleansing Cloud
       #navbar(class="navbar-collapse collapse")
         ul(class="nav navbar-nav")
           li
-            a(href="/") DataMiningCloud
+            a(href="/ui/") Home
           li
             a(href="/ui/models") Models
           li
             a(href="/ui/jobs") Jobs
           li
-            a(href="/ui/flows") Flows
-          li
             a(href="/ui/services") Services
+
+        ul(class="nav navbar-nav navbar-right")
+          li
+            button(type="button" class="btn btn-default navbar-btn") Login
+          li Sing

@@ -1,9 +1,13 @@
 extends layout
 
 block view
-  .container-fluid   
+  .container
+    ol(class="breadcrumb")
+      li
+        a(href="#") Home
+      block breadcrumb
+  .container
     .row
-      .col-md-4
+      .col-md-3
         block sidebar
-      .col-md-8
-        block content
+      block content

@@ -15,7 +15,6 @@ function formatJsonEditor(editor, val){
 }
 
 function initEditorUI(
-    updateLabel,
     url,
     dataField,
     defaultData,
@@ -31,9 +30,7 @@ function initEditorUI(
   }
   var dataField = dataField ? dataField : "data";
 
-  $('#submitBtn').button().
-  text(updateLabel).
-  click(function() {
+  $('#submitBtn').click(function() {
     var method = isCreateMode === true ? "post" : "put";
     var payload = {};
     payload[dataField] = editor.getSession().getValue();

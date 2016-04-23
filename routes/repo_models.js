@@ -14,7 +14,7 @@ router.get('', function(req, res, next) {
 });
 
 router.get('/new', function(req, res, next) {
-  res.render('model/modelMetadataEditor', { title: 'Create Model', modelKey: null });
+  res.render('model/modelCreator', { modelKey: null });
 });
 
 router.all("/:key*", function(req, res, next){
@@ -29,17 +29,16 @@ router.all("/:key*", function(req, res, next){
 });
 
 router.get('/:key', function(req, res, next) {
-  res.render('model/modelDetail',
+  res.render('model/modelDetailMeta',
   {
-    title: 'Details for ' + req.dataObj.metadata.name,
-    model: req.dataObj
+    "pageId": "MODEL_META",
+    "model": req.dataObj
   });
 });
 
 router.get('/:key/meta', function(req, res, next) {
   res.render('model/modelMetadataEditor',
   {
-    title: 'Edit Metadata of ' + req.dataObj.metadata.name,
     content: JSON.stringify(req.dataObj.metadata)
   });
 });
@@ -50,7 +49,6 @@ router.get('/:key/editor', function(req, res, next) {
       var modelData = JSON.parse(body);
       res.render('model/modelEditor',
       {
-        "title": 'Designer of ' + req.dataObj.metadata.name,
         "content": JSON.stringify(modelData.content)
       });
     }else {
@@ -68,7 +66,8 @@ router.get('/:key/archives', function(req, res, next) {
       items = JSON.parse(body);
     }
     res.render('model/modelArchives', {
-      "title": 'Archives',
+      "pageId": "MODEL_ARCH",
+      "model": req.dataObj,
       "items": items
     });
   });

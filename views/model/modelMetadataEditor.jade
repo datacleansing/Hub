@@ -2,10 +2,11 @@ extends base
 
 block scripts
   link(rel='stylesheet', href='/stylesheets/editor.css')
-  script(src='/scripts/ace/ace.js')
+  script(src='//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js')
   script(src='/scripts/editorCommon.js')
   script(src='/scripts/modelMetaJsonEditor.js')
 
 block content
-  #submitBtn
-  #editor= content
+  .col-md-7
+    #submitBtn
+    #editor= content

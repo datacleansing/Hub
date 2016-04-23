@@ -3,28 +3,29 @@ extends base
 block scripts
   script(src='/scripts/repo.js')
 
-block content
-  table(class="table table-hover")
-    tr
-      td
-        p Name:
-      td
-        p= model.metadata.name
-    tr
-      td
-        p Domain:
-      td
-        p= model.metadata.domain
-    tr
-      td
-        p Locale:
-      td
-        p= model.metadata.locale
+block breadcrumb
+  li
+    a(href="/ui/models") Models
+  li= model.metadata.name
 
-  ul
-    li
-      a(href= "/ui/models/" + model._id + "/meta") Edit metadata
-    li
-      a(href= "/ui/models/" + model._id + "/editor")  Edit model data
-    li
-      a(href= "/ui/models/" + model._id + "/archives")  Archives
+block content
+  .col-md-6
+    ul(class="nav nav-tabs")
+      li(
+        role="presentation"
+        class= pageId == "MODEL_META" ? "active" : "")
+        a(href= "/ui/models/" + model._id) Details
+      li(
+        role="presentation"
+        class= pageId == "MODEL_ARCH" ? "active" : "")
+        a(href= "/ui/models/" + model._id + "/archives") Archives
+    block model_detail
+
+  .col-md-3
+    div(class="panel panel-default")
+      .panel-body
+        ul(class='list-group')
+          a(class='list-group-item' href= "/ui/models/" + model._id + "/meta") Edit Metadata
+          a(class='list-group-item' href= "/ui/models/" + model._id + "/editor")  Edit Data
+          a(class='list-group-item' href= "/ui/models/" + model._id + "/export")  Export
+          a(class='list-group-item' href= "/ui/models/" + model._id + "/publish")  Publish

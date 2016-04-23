@@ -1,12 +1,8 @@
-extends base
+extends modelDetail
 
-block scripts
-  script(src='/scripts/repo.js')
-
-block content
-  p List model archives here
+block model_detail
   table(
-    border='1'
+    class="table table-hover"
     id='modelArchivesTable'
   )
     each val in items

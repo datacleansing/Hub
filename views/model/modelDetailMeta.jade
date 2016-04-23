@@ -1,0 +1,19 @@
+extends modelDetail
+
+block model_detail
+  table(class="table table-hover")
+    tr
+      td
+        p Name:
+      td
+        p= model.metadata.name
+    tr
+      td
+        p Domain:
+      td
+        p= model.metadata.domain
+    tr
+      td
+        p Locale:
+      td
+        p= model.metadata.locale
