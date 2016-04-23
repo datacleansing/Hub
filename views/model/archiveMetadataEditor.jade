@@ -1,0 +1,11 @@
+extends base
+
+block scripts
+  link(rel='stylesheet', href='/stylesheets/editor.css')
+  script(src='/scripts/ace/ace.js')
+  script(src='/scripts/editorCommon.js')
+  script(src='/scripts/modelActiveMetaJsonEditor.js')
+
+block content
+  #submitBtn
+  #editor= content

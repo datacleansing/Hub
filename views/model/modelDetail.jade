@@ -4,7 +4,7 @@ block scripts
   script(src='/scripts/repo.js')
 
 block content
-  table
+  table(class="table table-hover")
     tr
       td
         p Name:
@@ -27,4 +27,4 @@ block content
     li
       a(href= "/ui/models/" + model._id + "/editor")  Edit model data
     li
-      a(href= "/ui/models/" + model._id + "/archives")  Check model archives
+      a(href= "/ui/models/" + model._id + "/archives")  Archives

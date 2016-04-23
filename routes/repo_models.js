@@ -61,12 +61,16 @@ router.get('/:key/editor', function(req, res, next) {
 
 router.get('/:key/archives', function(req, res, next) {
   var url = dmcloud.repo.archiveUrl + "?modelId=" + req.params.key;
-  request('dmcloud.repo.archiveUrl', function (error, response, body) {
+  console.log("Fetch archives for " + url);
+  request(url, function (error, response, body) {
+    var items = [];
     if (!error && response.statusCode == 200) {
-        res.render('model/modelArchives', { title: 'Archives', items: JSON.parse(body)});
-    }else {
-      res.sendStatus(500);
+      items = JSON.parse(body);
     }
+    res.render('model/modelArchives', {
+      "title": 'Archives',
+      "items": items
+    });
   });
 });
 

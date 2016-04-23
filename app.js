@@ -26,6 +26,7 @@ dmcloud = {};
 dmcloud.repo = {};
 dmcloud.repo.baseUrl = process.env.DMCLOUD_REPO_URL ? rocess.env.DMCLOUD_REPO_URL : "http://localhost:12616/repo/";
 dmcloud.repo.modelUrl = dmcloud.repo.baseUrl + "models/"
+dmcloud.repo.archiveUrl = dmcloud.repo.baseUrl + "archives"
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

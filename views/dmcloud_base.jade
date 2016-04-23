@@ -1,8 +1,9 @@
 extends layout
 
 block view
-  .container
-    .sidebar
-      block sidebar
-    .main-content
-      block content
+  .container-fluid   
+    .row
+      .col-md-4
+        block sidebar
+      .col-md-8
+        block content
