@@ -58,9 +58,10 @@ passport.use(new GoogleStrategy({
     callbackURL: "/auth/google/callback"
   },
   function(token, tokenSecret, profile, done) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return done(err, user);
-    });
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return done(err, user);
+    // });
+
   }
 ));
 // GET /auth/google
@@ -94,6 +95,28 @@ passport.use(new WeiboStrategy({
    });
  }
 ));
+app.get('/auth/weibo',
+  passport.authenticate('weibo'),
+  function(req, res){
+    // The request will be redirected to Weibo for authentication, so this
+    // function will not be called.
+  });
+
+// GET /auth/weibo/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+app.get('/auth/weibo/callback',
+  passport.authenticate('weibo', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 app.use(function(req, res, next) {
 
