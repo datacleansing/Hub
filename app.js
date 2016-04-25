@@ -10,7 +10,8 @@ var nib = require('nib');
 
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
-var WeiboStrategy = require('passport-weibo').Strategy;
+var GitHubStrategy = require('passport-github2').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 
 var index = require('./routes/index');
 var repo_jobs = require('./routes/repo_jobs');
@@ -48,10 +49,32 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log("au");
+    console.log(username);
+    console.log(password);
+    // User.findOne({ username: username }, function(err, user) {
+    //   if (err) { return done(err); }
+    //   if (!user) {
+    //     return done(null, false, { message: 'Incorrect username.' });
+    //   }
+    //   if (!user.validPassword(password)) {
+    //     return done(null, false, { message: 'Incorrect password.' });
+    //   }
+    //   return done(null, user);
+    // });
+
+    return done(null, {})
+  }
+));
+
 app.post('/login', passport.authenticate('local',
   { successRedirect: '/ui/', failureRedirect: '/login' })
 );
 
+GOOGLE_CONSUMER_KEY = process.env.GOOGLE_CONSUMER_KEY || "";
+GOOGLE_CONSUMER_SECRET = process.env.GOOGLE_CONSUMER_SECRET || "";
 passport.use(new GoogleStrategy({
     consumerKey: GOOGLE_CONSUMER_KEY,
     consumerSecret: GOOGLE_CONSUMER_SECRET,
@@ -70,7 +93,7 @@ passport.use(new GoogleStrategy({
 //   the user to google.com.  After authorization, Google will redirect the user
 //   back to this application at /auth/google/callback
 app.get('/auth/google',
-  passport.authenticate('google', { scope: 'https://www.google.com/m8/feeds' })
+  passport.authenticate('google', { scope: 'http://hub.datacleansing.io/' })
 );
 
 // GET /auth/google/callback
@@ -84,21 +107,24 @@ app.get('/auth/google/callback',
     res.redirect('/');
   });
 
-passport.use(new WeiboStrategy({
-   clientID: WEIBO_CLIENT_ID,
-   clientSecret: WEIBO_CLIENT_SECRET,
-   callbackURL: "/auth/weibo/callback"
- },
- function(accessToken, refreshToken, profile, done) {
-   User.findOrCreate({ weiboId: profile.id }, function (err, user) {
-     return done(err, user);
-   });
- }
+GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || "";
+GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || "";
+passport.use(new GitHubStrategy({
+    "clientID": GITHUB_CLIENT_ID,
+    "clientSecret": GITHUB_CLIENT_SECRET,
+    "callbackURL": "/auth/github/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // User.findOrCreate({ githubId: profile.id }, function (err, user) {
+    //   return done(err, user);
+    // });
+  }
 ));
-app.get('/auth/weibo',
-  passport.authenticate('weibo'),
+
+app.get('/auth/github',
+  passport.authenticate('github'),
   function(req, res){
-    // The request will be redirected to Weibo for authentication, so this
+    // The request will be redirected to Github for authentication, so this
     // function will not be called.
   });
 
@@ -107,8 +133,8 @@ app.get('/auth/weibo',
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-app.get('/auth/weibo/callback',
-  passport.authenticate('weibo', { failureRedirect: '/login' }),
+app.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
   });
