@@ -7,19 +7,25 @@
           span(class="icon-bar")
           span(class="icon-bar")
           span(class="icon-bar")
-        .navbar-brand Data Cleansing Cloud
+        .navbar-brand
+          a(href="/ui/") Data Cleansing Hub
       #navbar(class="navbar-collapse collapse")
-        ul(class="nav navbar-nav")
+        ul(class="nav navbar-nav navbar-right")
           li
-            a(href="/ui/") Home
+            a(href="/ui/") Dashboard
           li
             a(href="/ui/models") Models
           li
-            a(href="/ui/jobs") Jobs
-          li
             a(href="/ui/services") Services
-
-        ul(class="nav navbar-nav navbar-right")
           li
-            a(href="/login") Sign In
-          li Sing
+            div(class="btn-group" role="group")
+              button(
+                type="button"
+                class="btn btn-default dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false")= user.displayName
+                span(class="caret")
+              ul(class="dropdown-menu")
+                li
+                  a(href="/logout") Log out
