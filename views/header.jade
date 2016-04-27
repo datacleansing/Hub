@@ -1,6 +1,10 @@
+mixin activeLink(url, viewId, label)
+  li(class= view == viewId ? "active" : "")
+    a(href=url)= label
+
 .container
-  nav(class="navbar navbar-inverse navbar-fixed-top")
-    container-fluid
+  nav(class="navbar navbar-default navbar-inverse")
+    .container-fluid
       .navbar-header
         button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
           span(class="sr-only") Toggle navigation
@@ -8,24 +12,43 @@
           span(class="icon-bar")
           span(class="icon-bar")
         .navbar-brand
-          a(href="/ui/") Data Cleansing Hub
+          a(href="/") Data Cleansing Hub
       #navbar(class="navbar-collapse collapse")
+        ul(class="nav navbar-nav navbar-left")
+          if user
+            +activeLink("/ui", "dashboard", "Dashboard")
+          +activeLink("/ui/algorithms", "algorithm/algorithms", "Algorithms")
+          if user
+            +activeLink("/ui/models", "model/models", "Models")
+            +activeLink("/ui/services", "service/services", "Services")
         ul(class="nav navbar-nav navbar-right")
-          li
-            a(href="/ui/") Dashboard
-          li
-            a(href="/ui/models") Models
-          li
-            a(href="/ui/services") Services
-          li
-            div(class="btn-group" role="group")
-              button(
-                type="button"
-                class="btn btn-default dropdown-toggle"
+          if user
+            li(class="dropdown")
+              a(
+                role="button"
+                href="#"
+                class="dropdown-toggle"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false")= user.displayName
-                span(class="caret")
-              ul(class="dropdown-menu")
-                li
-                  a(href="/logout") Log out
+                span.caret
+              ul.dropdown-menu
+                li(role="separator" class="divider")
+                li: a(href="/logout") Log out
+          else
+            li
+              a(href="/login") Sign in
+        form(class="navbar-form navbar-right" method="get" action="/ui/explorer/search" role="search")
+          div(class="input-group input-group-nav")
+            input(
+              type="text"
+              class="form-control"
+              id="input-search"
+              name="searchField"
+              placeholder="Search for...")
+            span(class="input-group-btn")
+              a(
+                role="button"
+                class="btn"
+                onclick="$(this).closest('form').submit()")
+                span(class="glyphicon glyphicon-search" aria-hidden)

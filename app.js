@@ -11,14 +11,13 @@ var nib = require('nib');
 
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
-var GitHubStrategy = require('passport-github2').Strategy;
+var GitHubStrategy = require('passport-github').Strategy;
 
 var index = require('./routes/index');
-var repo_jobs = require('./routes/repo_jobs');
-var repo_models = require('./routes/repo_models');
-var repo_archives = require('./routes/repo_archives');
-var flow = require('./routes/flow');
-var service = require('./routes/service');
+var explorer = require('./routes/explorer');
+var models = require('./routes/models');
+var services = require('./routes/service');
+var algorithms = require('./routes/algorithm');
 
 var app = express();
 
@@ -27,11 +26,16 @@ function compile(str, path) {
     .set('filename', path)
     .use(nib())
 }
-dmcloud = {};
-dmcloud.repo = {};
-dmcloud.repo.baseUrl = process.env.DMCLOUD_REPO_URL ? rocess.env.DMCLOUD_REPO_URL : "http://localhost:12616/repo/";
-dmcloud.repo.modelUrl = dmcloud.repo.baseUrl + "models/"
-dmcloud.repo.archiveUrl = dmcloud.repo.baseUrl + "archives"
+dchub = {};
+dchub.repo = {};
+dchub.repo.baseUrl = process.env.DMCLOUD_REPO_URL || "http://127.0.0.1:12616/";
+dchub.repo.modelUrl = dchub.repo.baseUrl + "models";
+dchub.engine = {};
+dchub.engine.baseUrl = process.env.DMCLOUD_ENGINE_URL || "http://127.0.0.1:12617/";
+dchub.engine.algorithmsUrl = dchub.engine.baseUrl + "algrithms";
+dchub.servicesProxy = {};
+dchub.servicesProxy.baseUrl = process.env.DMCLOUD_SERVICEPROXY_URL || "http://127.0.0.1:12618/";
+dchub.servicesProxy.servicesUrl = dchub.servicesProxy.baseUrl + "services";
 
 
 function handleToken(token, tokenSecret, profile, done, domain) {
@@ -110,9 +114,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 function handleAuthCallback(req, res){
-    res.redirect('/ui/');
+  res.redirect('/ui/');
 };
 
 app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.google.com/m8/feeds' }));
@@ -135,19 +138,25 @@ app.use(stylus.middleware(
   , compile: compile
   }
 ))
-
-app.use(stylus.middleware(
-  { src: __dirname + '/public'
-  , compile: compile
-  }
-))
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+dchub.render = function(req, res, view, load){
+  var data = {
+    "view": view,
+    "user": req.user
+  }
+  if(load){
+    for (var key in load) {
+      data[key] = load[key];
+    }
+  }
+  res.render(view, data)
+}
 
-app.get('/login', function(req, res, next) {
-  res.render('login');
-});
+app.use('/', index);
+app.use('/ui/algorithms', algorithms);
+app.use('/ui/services', services);
+app.use('/ui/explorer', explorer);
 
 app.use(function(req, res, next) {
   if(req.isAuthenticated()){
@@ -160,15 +169,9 @@ app.use(function(req, res, next) {
   }
 });
 app.get('/ui/', function(req, res, next) {
-res.render('dashboard', {
-  "user": req.user
+  dchub.render(req, res, 'dashboard');
 });
-});
-app.use('/ui/jobs', repo_jobs);
-app.use('/ui/models', repo_models);
-app.use('/ui/archives', repo_archives);
-app.use('/ui/flows', flow);
-app.use('/ui/services', service);
+app.use('/ui/models', models);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

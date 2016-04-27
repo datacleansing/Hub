@@ -1,6 +1,20 @@
-extends nonAuth/layout
+extends dmcloud_base
 
-block content
-  .jumbotron
-    .container
-      text Summary Information will be here: {n} models, {n} jobs, {n} flows and {n} services.
+mixin dashboard(id, des)
+  div(class="col-md-4 total")
+    div.count
+      h5= des
+      span(
+        id=id
+        ) 0
+
+block body
+  .container
+    section(class="number text-center")
+      .row
+        .h1 Algorithms, Models, Services
+        .h4 Choose an algorithm, customize it's model, publish the service for you.
+      .row
+        +dashboard('algorithm', 'Algorithms built:')
+        +dashboard('model', 'Models customized:')
+        +dashboard('service', 'Services published:')
