@@ -37,7 +37,6 @@ dchub.servicesProxy = {};
 dchub.servicesProxy.baseUrl = process.env.DMCLOUD_SERVICEPROXY_URL || "http://127.0.0.1:12618/";
 dchub.servicesProxy.servicesUrl = dchub.servicesProxy.baseUrl + "services";
 
-
 function handleToken(token, tokenSecret, profile, done, domain) {
   var account = {
     "domain": domain,
@@ -64,16 +63,16 @@ function handleGitHubToken(token, tokenSecret, profile, done){
 }
 
 passport.use(new GoogleStrategy({
-    consumerKey: process.env.GOOGLE_CONSUMER_KEY || "",
-    consumerSecret: process.env.GOOGLE_CONSUMER_SECRET || "",
+    consumerKey: process.env.GOOGLE_CONSUMER_KEY || "GOOGLE_CONSUMER_KEY",
+    consumerSecret: process.env.GOOGLE_CONSUMER_SECRET || "GOOGLE_CONSUMER_SECRET",
     callbackURL: "/auth/google/callback"
   },
   handleGoogleToken
 ));
 
 passport.use(new GitHubStrategy({
-    "clientID": process.env.GITHUB_CLIENT_ID || "",
-    "clientSecret": process.env.GITHUB_CLIENT_SECRET || "",
+    "clientID": process.env.GITHUB_CLIENT_ID || "GITHUB_CLIENT_ID",
+    "clientSecret": process.env.GITHUB_CLIENT_SECRET || "GITHUB_CLIENT_SECRET",
     "callbackURL": "/auth/github/callback"
   },
   handleGitHubToken
@@ -152,6 +151,26 @@ dchub.render = function(req, res, view, load){
   }
   res.render(view, data)
 }
+app.use(function(req, res, next) {
+
+  if(process.env.DCH_DEBUG === "1"){
+      req.login({
+        "domain": "system",
+        "uid": "system_user",
+        "displayName": "System User",
+        "tokens": [
+          {
+            "kind": 'oauth',
+            "token": "token",
+            "attributes": {
+              "tokenSecret": "tokenSecret"
+            }
+          }]
+      }, function(req, res){
+        next();
+      });
+  }
+});
 
 app.use('/', index);
 app.use('/ui/algorithms', algorithms);
@@ -160,9 +179,6 @@ app.use('/ui/explorer', explorer);
 
 app.use(function(req, res, next) {
   if(req.isAuthenticated()){
-    res.header('Access-Control-Allow-Origin',  '*');
-    res.header('Access-Control-Allow-Methods','OPTIONS,GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
     next();
   }else{
     res.render("403");
