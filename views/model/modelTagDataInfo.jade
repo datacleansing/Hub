@@ -1,0 +1,8 @@
+extends modelTagDetailsBase
+
+block tag_detail
+  h5.text-center No data yet
+  a(
+    class='list-group-item'
+    href= URI_REPO + repoId + URI_MODELS + "/" + model.id + URI_TAGS + "/" + tag.id + "/uploader")
+      .text-center Upload Data

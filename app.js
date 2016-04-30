@@ -13,6 +13,40 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
 var GitHubStrategy = require('passport-github').Strategy;
 
+dchub = {};
+
+URI_REPO = "/ui/repository/";
+URI_ALGORITHMS = "/ui/algorithms/";
+URI_SERVICES = "/ui/services/";
+URI_EXPLORER = "/ui/explorer";
+URI_MODELS = "/models";
+URI_TAGS = "/tags";
+URL_TAG_LATEST = URI_TAGS + "/latest";
+URI_NEW_MODEL = "/newModel";
+REPOID_TOKEN = ":repoId"
+TAG_TOKEN="/:tagId"
+
+dchub.render = function(req, res, view, load){
+  var data = {
+    "URI_ALGORITHMS": URI_ALGORITHMS,
+    "URI_SERVICES": URI_SERVICES,
+    "URI_EXPLORER": URI_EXPLORER,
+    "URI_MODELS": URI_MODELS,
+    "URI_TAGS": URI_TAGS,
+    "URL_TAG_LATEST": URL_TAG_LATEST,
+    "URI_NEW_MODEL": URI_NEW_MODEL,
+    "REPOID_TOKEN": REPOID_TOKEN,
+    "user": req.user,
+    "view": view
+  }
+  if(load){
+    for (var key in load) {
+      data[key] = load[key];
+    }
+  }
+  res.render(view, data)
+}
+
 var index = require('./routes/index');
 var explorer = require('./routes/explorer');
 var models = require('./routes/models');
@@ -26,7 +60,6 @@ function compile(str, path) {
     .set('filename', path)
     .use(nib())
 }
-dchub = {};
 dchub.repo = {};
 dchub.repo.baseUrl = process.env.DMCLOUD_REPO_URL || "http://127.0.0.1:12616/";
 dchub.repo.baseUrl = dchub.repo.baseUrl + "repository"
@@ -142,31 +175,6 @@ app.use(stylus.middleware(
 ))
 app.use(express.static(path.join(__dirname, 'public')));
 
-URI_REPO = "/ui/repository/";
-URI_ALGORITHMS = "/ui/algorithms/";
-URI_SERVICES = "/ui/services/";
-URI_EXPLORER = "/ui/explorer";
-URI_MODELS = "/models";
-URI_NEW_MODEL = "/newModel";
-URI_REPOID = ":repoId"
-dchub.render = function(req, res, view, load){
-  var data = {
-    "URI_ALGORITHMS": URI_ALGORITHMS,
-    "URI_SERVICES": URI_SERVICES,
-    "URI_EXPLORER": URI_EXPLORER,
-    "URI_MODELS": URI_MODELS,
-    "URI_NEW_MODEL": URI_NEW_MODEL,
-    "URI_REPOID": URI_REPOID,
-    "user": req.user,
-    "view": view
-  }
-  if(load){
-    for (var key in load) {
-      data[key] = load[key];
-    }
-  }
-  res.render(view, data)
-}
 app.use(function(req, res, next) {
 
   if(process.env.DCH_DEBUG === "1"){
@@ -212,15 +220,15 @@ dchub.repoRender = function(req, res, view, load){
   }
   dchub.render(req, res, view, data);
 }
-app.use(URI_REPO + URI_REPOID + '*', function(req, res, next) {
+app.use(URI_REPO + REPOID_TOKEN + '*', function(req, res, next) {
   req.repoId = req.params.repoId;
   next();
 });
-app.get(URI_REPO + URI_REPOID, function(req, res, next) {
+app.get(URI_REPO + REPOID_TOKEN, function(req, res, next) {
   dchub.repoRender(req, res, 'dashboard');
 });
-app.use(URI_REPO + URI_REPOID + URI_MODELS, models);
-app.get(URI_REPO + URI_REPOID + URI_NEW_MODEL, function(req, res, next) {
+app.use(URI_REPO + REPOID_TOKEN + URI_MODELS, models);
+app.get(URI_REPO + REPOID_TOKEN + URI_NEW_MODEL, function(req, res, next) {
   dchub.repoRender(req, res, 'model/modelCreator', {
     "code": req.params ? req.params.code : null
   });

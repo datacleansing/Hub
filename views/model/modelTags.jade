@@ -1,15 +1,18 @@
 extends modelDetailBase
 
 block model_detail
-  table(
-    class="table table-hover"
-    id='modelTagsTable'
-  )
-    each val in items
-      tr
-        td
-          a(href= "/ui/archives/model/" + val.key)
-            text=  val.id
+  if items.length == 0
+    h5.text-center No data yet
+  else
+    table(
+      class="table table-hover"
+      id='modelTagsTable'
+    )
+      each val in items
+        tr
+          td
+            a(href= URI_REPO + val.repository + URI_MODELS + "/" + val.resourceId + "/" + val.id)
+              text=  val.id
 
 block actionContent
   div(class="panel panel-default")
@@ -17,4 +20,5 @@ block actionContent
       ul(class='list-group')
         a(
           class='list-group-item'
-          href= URI_REPO + repoId + URI_MODELS + "/" + model.id + "/newTag")  Update Data
+          href= URI_REPO + repoId + URI_MODELS + "/" + model.id + URL_TAG_LATEST)
+            = items.length == 0 ? "Add Data" : "Update Data"

@@ -2,16 +2,22 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-function getRepoModelsURL(repoId){
-  return dchub.repo.baseUrl + "/" + repoId + "/models";
+MODEL_TOKEN="/:modelId"
+
+function getRepoModelsURL(req){
+  return dchub.repo.baseUrl + "/" + req.repoId + URI_MODELS;
 }
 
-function getRepoModelURL(repoId, modelId){
-  return getRepoModelsURL(repoId) + "/" + modelId;
+function getRepoModelURL(req){
+  return getRepoModelsURL(req) + "/" + req.params.modelId;
 }
 
-function getRepoModelTagsURL(repoId, modelId){
-  return getRepoModelURL(repoId, modelId) + "/tags";
+function getRepoModelTagsURL(req){
+  return getRepoModelURL(req) + "/" + URI_TAGS;
+}
+
+function getRepoModelTagURL(req){
+  return getRepoModelTagsURL(req) + "/" + req.params.tagId;
 }
 
 router.get('', function(req, res, next) {
@@ -60,11 +66,10 @@ router.post('', function(req, res, next) {
   }
 });
 
-router.all("/:key*", function(req, res, next){
-  request(getRepoModelURL(req.repoId, req.params.key), function (error, response, body) {
+router.all(MODEL_TOKEN + "*", function(req, res, next){
+  request(getRepoModelURL(req), function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(body);
-      req.dataObj = JSON.parse(body);
+      req.modelObj = JSON.parse(body);
       next();
     }else {
       res.sendStatus(404);
@@ -72,34 +77,101 @@ router.all("/:key*", function(req, res, next){
   });
 });
 
-router.get('/:key', function(req, res, next) {
+router.get(MODEL_TOKEN, function(req, res, next) {
   dchub.repoRender(req, res, 'model/modelDetailMeta',
   {
     "pageId": "MODEL_META",
-    "model": req.dataObj
+    "model": req.modelObj
   });
 });
 
-router.get('/:key/meta', function(req, res, next) {
+router.get(MODEL_TOKEN + '/meta', function(req, res, next) {
   dchub.repoRender(req, res, 'model/modelMetadataEditor',
   {
     "pageId": "MODEL_META",
-    "model": req.dataObj
+    "model": req.modelObj
   });
 });
 
-router.get('/:key/tags', function(req, res, next) {
-  request(getRepoModelTagsURL(req.repoId, req.params.key), function (error, response, body) {
+router.get(MODEL_TOKEN + URI_TAGS , function(req, res, next) {
+  request(getRepoModelTagsURL(req), function (error, response, body) {
     var items = [];
     if (!error && response.statusCode == 200) {
       items = JSON.parse(body).items;
     }
     dchub.repoRender(req, res, 'model/modelTags', {
       "pageId": "MODEL_TAG",
-      "model": req.dataObj,
+      "model": req.modelObj,
       "items": items
     });
   });
+});
+
+router.all(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "*", function(req, res, next) {
+  request(getRepoModelTagURL(req), function (error, response, body) {
+    var tag = null;
+    if (!error && response.statusCode == 200) {
+      tag = JSON.parse(body);
+    }else{
+      tag = {
+        "resourceId": req.modelObj.id,
+        "id": req.params.tagId,
+        "dataUri": ""
+      };
+    }
+    req.tagObj = tag;
+    next();
+  });
+});
+
+router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN, function(req, res, next) {
+  dchub.repoRender(req, res, 'model/modelTagDetails', {
+    "pageId": "TAG_META",
+    "model": req.modelObj,
+    "tag": req.tagObj
+  });
+});
+
+router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/data", function(req, res, next) {
+  dchub.repoRender(req, res, 'model/modelTagDataInfo', {
+    "pageId": "TAG_DATA",
+    "model": req.modelObj,
+    "tag": req.tagObj
+  });
+});
+
+router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/usage", function(req, res, next) {
+  dchub.repoRender(req, res, 'model/modelTagUsage', {
+    "pageId": "TAG_USAGE",
+    "model": req.modelObj,
+    "tag": req.tagObj
+  });
+});
+
+router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/uploader", function(req, res, next) {
+  dchub.repoRender(req, res, 'model/modelTagDataUploader', {
+    "model": req.modelObj,
+    "tag": req.tagObj
+  });
+});
+
+router.post(MODEL_TOKEN + URI_TAGS + TAG_TOKEN, function(req, res, next) {
+  console.log("Upload data to " + getRepoModelTagURL(req));
+  request.put(
+    getRepoModelTagURL(req),
+    {
+      "body": new Date().toString()
+    },
+    function (error, response, body) {
+      if (!error && response.statusCode == 201) {
+        res.redirect(
+          URI_REPO + req.repoId +
+          URI_MODELS + "/" + req.modelObj.id +
+          URI_TAGS + "/" + req.tagObj.id);
+      }else {
+        res.sendStatus(500);
+      }
+    });
 });
 
 module.exports = router;

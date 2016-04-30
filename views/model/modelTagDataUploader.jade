@@ -1,0 +1,31 @@
+extends actionsBase
+
+block scripts
+  link(rel='stylesheet', href='/stylesheets/editor.css')
+  script(src='/scripts/ace/ace.js')
+
+block mainContent
+  form(
+    action= URI_REPO + repoId + URI_MODELS + "/" + model.id + URI_TAGS + "/" + tag.id
+    method="POST")
+    .form-group
+      label(for="dataInput") Data:
+      textarea(
+        require="true"
+        type="text"
+        class="form-control"
+        name="data"
+        id="dataInput"
+        value= tag.dataUri
+        placeholder="Model Data Here")
+
+    button(type="submit" class="btn btn-default") Upload
+
+block actionContent
+  div(class="panel panel-default")
+    .panel-body
+      ul(class='list-group')
+        a(
+          class='list-group-item'
+          href= URI_REPO + repoId + URI_MODELS + "/" + model.id + URI_TAGS + "/" + tag.id + "/publish")
+            = "Publish as Service"

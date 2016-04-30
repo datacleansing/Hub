@@ -1,0 +1,14 @@
+extends modelTagDetailsBase
+
+block tag_detail
+  table(class="table table-hover")
+    tr
+      td
+        p Name:
+      td
+        p= tag.id
+    tr
+      td
+        p Data URI:
+      td
+        p= tag.dataUri
