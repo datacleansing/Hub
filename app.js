@@ -29,7 +29,10 @@ function compile(str, path) {
 dchub = {};
 dchub.repo = {};
 dchub.repo.baseUrl = process.env.DMCLOUD_REPO_URL || "http://127.0.0.1:12616/";
-dchub.repo.modelUrl = dchub.repo.baseUrl + "models";
+dchub.repo.baseUrl = dchub.repo.baseUrl + "repository"
+dchub.fileuploader = {};
+dchub.fileuploader.baseUrl = process.env.DMCLOUD_FILEUPLOADER_URL || "http://127.0.0.1:12617/";
+dchub.fileuploader.baseUrl = dchub.fileuploader.baseUrl + "fileuploader"
 dchub.engine = {};
 dchub.engine.baseUrl = process.env.DMCLOUD_ENGINE_URL || "http://127.0.0.1:12617/";
 dchub.engine.algorithmsUrl = dchub.engine.baseUrl + "algrithms";
@@ -139,10 +142,23 @@ app.use(stylus.middleware(
 ))
 app.use(express.static(path.join(__dirname, 'public')));
 
+URI_REPO = "/ui/repository/";
+URI_ALGORITHMS = "/ui/algorithms/";
+URI_SERVICES = "/ui/services/";
+URI_EXPLORER = "/ui/explorer";
+URI_MODELS = "/models";
+URI_NEW_MODEL = "/newModel";
+URI_REPOID = ":repoId"
 dchub.render = function(req, res, view, load){
   var data = {
-    "view": view,
-    "user": req.user
+    "URI_ALGORITHMS": URI_ALGORITHMS,
+    "URI_SERVICES": URI_SERVICES,
+    "URI_EXPLORER": URI_EXPLORER,
+    "URI_MODELS": URI_MODELS,
+    "URI_NEW_MODEL": URI_NEW_MODEL,
+    "URI_REPOID": URI_REPOID,
+    "user": req.user,
+    "view": view
   }
   if(load){
     for (var key in load) {
@@ -156,7 +172,7 @@ app.use(function(req, res, next) {
   if(process.env.DCH_DEBUG === "1"){
       req.login({
         "domain": "system",
-        "uid": "system_user",
+        "uid": "datacleansing",
         "displayName": "System User",
         "tokens": [
           {
@@ -173,9 +189,9 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', index);
-app.use('/ui/algorithms', algorithms);
-app.use('/ui/services', services);
-app.use('/ui/explorer', explorer);
+app.use(URI_ALGORITHMS, algorithms);
+app.use(URI_SERVICES, services);
+app.use(URI_EXPLORER, explorer);
 
 app.use(function(req, res, next) {
   if(req.isAuthenticated()){
@@ -184,10 +200,31 @@ app.use(function(req, res, next) {
     res.render("403");
   }
 });
-app.get('/ui/', function(req, res, next) {
-  dchub.render(req, res, 'dashboard');
+
+dchub.repoRender = function(req, res, view, load){
+  var data = {
+    "repoId": req.repoId
+  }
+  if(load){
+    for (var key in load) {
+      data[key] = load[key];
+    }
+  }
+  dchub.render(req, res, view, data);
+}
+app.use(URI_REPO + URI_REPOID + '*', function(req, res, next) {
+  req.repoId = req.params.repoId;
+  next();
 });
-app.use('/ui/models', models);
+app.get(URI_REPO + URI_REPOID, function(req, res, next) {
+  dchub.repoRender(req, res, 'dashboard');
+});
+app.use(URI_REPO + URI_REPOID + URI_MODELS, models);
+app.get(URI_REPO + URI_REPOID + URI_NEW_MODEL, function(req, res, next) {
+  dchub.repoRender(req, res, 'model/modelCreator', {
+    "code": req.params ? req.params.code : null
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

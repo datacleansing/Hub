@@ -17,10 +17,10 @@ mixin activeLink(url, viewId, label)
         ul(class="nav navbar-nav navbar-left")
           if user
             +activeLink("/ui", "dashboard", "Dashboard")
-          +activeLink("/ui/algorithms", "algorithm/algorithms", "Algorithms")
+          +activeLink(URI_ALGORITHMS, "algorithm/algorithms", "Algorithms")
           if user
-            +activeLink("/ui/models", "model/models", "Models")
-            +activeLink("/ui/services", "service/services", "Services")
+            +activeLink(URI_REPO + user.uid + URI_MODELS, "model/models", "Models")
+            +activeLink(URI_SERVICES + user.uid , "service/services", "Services")
         ul(class="nav navbar-nav navbar-right")
           if user
             li(class="dropdown")

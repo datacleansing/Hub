@@ -1,31 +1,13 @@
-extends base
+extends actionsBase
 
-block scripts
-  script(src='/scripts/repo.js')
-
-block breadcrumb
-  li
-    a(href="/ui/models") Models
-  li= model.metadata.name
-
-block content
-  .col-md-6
-    ul(class="nav nav-tabs")
-      li(
-        role="presentation"
-        class= pageId == "MODEL_META" ? "active" : "")
-        a(href= "/ui/models/" + model._id) Details
-      li(
-        role="presentation"
-        class= pageId == "MODEL_ARCH" ? "active" : "")
-        a(href= "/ui/models/" + model._id + "/archives") Archives
-    block model_detail
-
-  .col-md-3
-    div(class="panel panel-default")
-      .panel-body
-        ul(class='list-group')
-          a(class='list-group-item' href= "/ui/models/" + model._id + "/meta") Edit Metadata
-          a(class='list-group-item' href= "/ui/models/" + model._id + "/editor")  Edit Data
-          a(class='list-group-item' href= "/ui/models/" + model._id + "/export")  Export
-          a(class='list-group-item' href= "/ui/models/" + model._id + "/publish")  Publish
+block mainContent
+  ul(class="nav nav-tabs")
+    li(
+      role="presentation"
+      class= pageId == "MODEL_META" ? "active" : "")
+      a(href= URI_REPO + repoId + URI_MODELS + "/" + model.id) Details
+    li(
+      role="presentation"
+      class= pageId == "MODEL_TAG" ? "active" : "")
+      a(href= URI_REPO + repoId + URI_MODELS + "/" + model.id + "/tags") Tags
+  block model_detail

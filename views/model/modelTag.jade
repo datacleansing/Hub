@@ -1,0 +1,13 @@
+extends actionsBase
+
+block model_detail
+  .col-md-6
+
+
+block actionBlock
+  div(class="panel panel-default")
+    .panel-body
+      ul(class='list-group')
+        a(
+          class='list-group-item'
+          href= URI_REPO + repoId + URI_MODELS + "/" + model.id + "/newTag")  Add Data

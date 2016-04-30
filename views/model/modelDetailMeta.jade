@@ -1,4 +1,4 @@
-extends modelDetail
+extends modelDetailBase
 
 block model_detail
   table(class="table table-hover")
@@ -6,14 +6,32 @@ block model_detail
       td
         p Name:
       td
-        p= model.metadata.name
+        p= model.id
+    tr
+      td
+        p Data Type:
+      td
+        p= model.datatype
     tr
       td
         p Domain:
       td
-        p= model.metadata.domain
+        p= model.domain
     tr
       td
         p Locale:
       td
-        p= model.metadata.locale
+        p= model.locale
+    tr
+      td
+        p Description:
+      td
+        p= model.description
+
+block actionContent
+  div(class="panel panel-default")
+    .panel-body
+      ul(class='list-group')
+        a(
+          class='list-group-item'
+          href= URI_REPO + repoId + URI_MODELS + "/" + model.id + "/meta")  Update Metadata
