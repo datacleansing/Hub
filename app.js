@@ -26,6 +26,20 @@ URI_NEW_MODEL = "/newModel";
 REPOID_TOKEN = ":repoId"
 TAG_TOKEN="/:tagId"
 
+URL_HUB = process.env.DMCLOUD_HUB_HOST || "http://127.0.0.1:8080/";
+dchub.repo = {};
+dchub.repo.baseUrl = process.env.DMCLOUD_REPO_URL || "http://127.0.0.1:12616/";
+dchub.repo.baseUrl = dchub.repo.baseUrl + "/repository"
+dchub.fileuploader = {};
+URL_UPLOADER = process.env.DMCLOUD_FILEUPLOADER_HOST || "http://127.0.0.1:12617/";
+URL_UPLOADER = URL_UPLOADER + "/fileUploader"
+dchub.engine = {};
+dchub.engine.baseUrl = process.env.DMCLOUD_ENGINE_URL || "http://127.0.0.1:12617/";
+dchub.engine.algorithmsUrl = dchub.engine.baseUrl + "/algrithms";
+dchub.servicesProxy = {};
+dchub.servicesProxy.baseUrl = process.env.DMCLOUD_SERVICEPROXY_URL || "http://127.0.0.1:12618/";
+dchub.servicesProxy.servicesUrl = dchub.servicesProxy.baseUrl + "/services";
+
 dchub.render = function(req, res, view, load){
   var data = {
     "URI_ALGORITHMS": URI_ALGORITHMS,
@@ -60,18 +74,6 @@ function compile(str, path) {
     .set('filename', path)
     .use(nib())
 }
-dchub.repo = {};
-dchub.repo.baseUrl = process.env.DMCLOUD_REPO_URL || "http://127.0.0.1:12616/";
-dchub.repo.baseUrl = dchub.repo.baseUrl + "repository"
-dchub.fileuploader = {};
-dchub.fileuploader.baseUrl = process.env.DMCLOUD_FILEUPLOADER_URL || "http://127.0.0.1:12617/";
-dchub.fileuploader.baseUrl = dchub.fileuploader.baseUrl + "fileuploader"
-dchub.engine = {};
-dchub.engine.baseUrl = process.env.DMCLOUD_ENGINE_URL || "http://127.0.0.1:12617/";
-dchub.engine.algorithmsUrl = dchub.engine.baseUrl + "algrithms";
-dchub.servicesProxy = {};
-dchub.servicesProxy.baseUrl = process.env.DMCLOUD_SERVICEPROXY_URL || "http://127.0.0.1:12618/";
-dchub.servicesProxy.servicesUrl = dchub.servicesProxy.baseUrl + "services";
 
 function handleToken(token, tokenSecret, profile, done, domain) {
   var account = {
@@ -163,6 +165,13 @@ app.get('/auth/github/callback',
   passport.authenticate('github'),
   handleAuthCallback);
 
+
+app.use(function(req, res, next) {
+  //res.header('Access-Control-Allow-Origin',  '*');
+  //res.header('Access-Control-Allow-Methods','OPTIONS,GET,PUT,POST,DELETE');
+  //res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  next();
+});
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/login');

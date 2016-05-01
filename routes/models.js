@@ -22,7 +22,7 @@ function getRepoModelTagURL(req){
 
 router.get('', function(req, res, next) {
   var models = [];
-  request(getRepoModelsURL(req.repoId), function (error, response, body) {
+  request(getRepoModelsURL(req), function (error, response, body) {
     if (!error && response.statusCode == 200) {
       models = JSON.parse(body).items
     }else {
@@ -45,7 +45,7 @@ router.post('', function(req, res, next) {
         "id": newSource.id
       }
       request.post(
-        getRepoModelsURL(req.repoId),
+        getRepoModelsURL(req),
         {
           "json": true,
           "headers": {
@@ -99,6 +99,7 @@ router.get(MODEL_TOKEN + URI_TAGS , function(req, res, next) {
     if (!error && response.statusCode == 200) {
       items = JSON.parse(body).items;
     }
+    console.log(items);
     dchub.repoRender(req, res, 'model/modelTags', {
       "pageId": "MODEL_TAG",
       "model": req.modelObj,
@@ -149,25 +150,25 @@ router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/usage", function(req, res, nex
 });
 
 router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/uploader", function(req, res, next) {
+  var tagUrl = URL_HUB + URI_REPO + req.repoId + URI_MODELS + "/" + req.modelObj.id + URI_TAGS + "/" + req.tagObj.id;
   dchub.repoRender(req, res, 'model/modelTagDataUploader', {
     "model": req.modelObj,
-    "tag": req.tagObj
+    "tag": req.tagObj,
+    "uploader_url": URL_UPLOADER,
+    "tag_url": tagUrl,
+    "success_url" : tagUrl + "/data"
   });
 });
 
-router.post(MODEL_TOKEN + URI_TAGS + TAG_TOKEN, function(req, res, next) {
-  console.log("Upload data to " + getRepoModelTagURL(req));
+router.put(MODEL_TOKEN + URI_TAGS + TAG_TOKEN, function(req, res, next) {
   request.put(
-    getRepoModelTagURL(req),
+    getRepoModelTagURL(req) + "",
     {
-      "body": new Date().toString()
+      "body": req.body.uri
     },
     function (error, response, body) {
       if (!error && response.statusCode == 201) {
-        res.redirect(
-          URI_REPO + req.repoId +
-          URI_MODELS + "/" + req.modelObj.id +
-          URI_TAGS + "/" + req.tagObj.id);
+        res.sendStatus(204);
       }else {
         res.sendStatus(500);
       }

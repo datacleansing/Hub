@@ -11,7 +11,7 @@ block model_detail
       each val in items
         tr
           td
-            a(href= URI_REPO + val.repository + URI_MODELS + "/" + val.resourceId + "/" + val.id)
+            a(href= URI_REPO + repoId + URI_MODELS + "/" + model.id + URI_TAGS + "/" + val.id)
               text=  val.id
 
 block actionContent
