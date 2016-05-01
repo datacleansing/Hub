@@ -28,16 +28,16 @@ TAG_TOKEN="/:tagId"
 
 URL_HUB = process.env.DMCLOUD_HUB_HOST || "http://127.0.0.1:8080/";
 dchub.repo = {};
-dchub.repo.baseUrl = process.env.DMCLOUD_REPO_URL || "http://127.0.0.1:12616/";
+dchub.repo.baseUrl = process.env.DMCLOUD_REPO_HOST || "http://127.0.0.1:12616/";
 dchub.repo.baseUrl = dchub.repo.baseUrl + "/repository"
 dchub.fileuploader = {};
 URL_UPLOADER = process.env.DMCLOUD_FILEUPLOADER_HOST || "http://127.0.0.1:12617/";
 URL_UPLOADER = URL_UPLOADER + "/fileUploader"
 dchub.engine = {};
-dchub.engine.baseUrl = process.env.DMCLOUD_ENGINE_URL || "http://127.0.0.1:12617/";
+dchub.engine.baseUrl = process.env.DMCLOUD_ENGINE_HOST || "http://127.0.0.1:12617/";
 dchub.engine.algorithmsUrl = dchub.engine.baseUrl + "/algrithms";
 dchub.servicesProxy = {};
-dchub.servicesProxy.baseUrl = process.env.DMCLOUD_SERVICEPROXY_URL || "http://127.0.0.1:12618/";
+dchub.servicesProxy.baseUrl = process.env.DMCLOUD_SERVICEPROXY_HOST || "http://127.0.0.1:12618/";
 dchub.servicesProxy.servicesUrl = dchub.servicesProxy.baseUrl + "/services";
 
 dchub.render = function(req, res, view, load){
