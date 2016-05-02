@@ -19,6 +19,7 @@ URI_REPO = "/ui/repository/";
 URI_ALGORITHMS = "/ui/algorithms/";
 URI_SERVICES = "/ui/services/";
 URI_EXPLORER = "/ui/explorer";
+URI_MODEL_JOBS="/modelJobs";
 URI_MODELS = "/models";
 URI_TAGS = "/tags";
 URL_TAG_LATEST = URI_TAGS + "/latest";
@@ -26,19 +27,17 @@ URI_NEW_MODEL = "/newModel";
 REPOID_TOKEN = ":repoId"
 TAG_TOKEN="/:tagId"
 
-URL_HUB = process.env.DMCLOUD_HUB_HOST || "http://127.0.0.1:8080/";
+URL_HUB = process.env.DMCLOUD_HUB_HOST || "http://127.0.0.1:8080";
 dchub.repo = {};
-dchub.repo.baseUrl = process.env.DMCLOUD_REPO_HOST || "http://127.0.0.1:12616/";
+dchub.repo.baseUrl = process.env.DMCLOUD_REPO_HOST || "http://127.0.0.1:12616";
 dchub.repo.baseUrl = dchub.repo.baseUrl + "/repository"
-dchub.fileuploader = {};
-URL_UPLOADER = process.env.DMCLOUD_FILEUPLOADER_HOST || "http://127.0.0.1:12617/";
+URL_UPLOADER = process.env.DMCLOUD_FILEUPLOADER_HOST || "http://127.0.0.1:12616";
 URL_UPLOADER = URL_UPLOADER + "/fileUploader"
-dchub.engine = {};
-dchub.engine.baseUrl = process.env.DMCLOUD_ENGINE_HOST || "http://127.0.0.1:12617/";
-dchub.engine.algorithmsUrl = dchub.engine.baseUrl + "/algrithms";
-dchub.servicesProxy = {};
-dchub.servicesProxy.baseUrl = process.env.DMCLOUD_SERVICEPROXY_HOST || "http://127.0.0.1:12618/";
-dchub.servicesProxy.servicesUrl = dchub.servicesProxy.baseUrl + "/services";
+URL_ENGINES = process.env.DMCLOUD_ENGINE_HOST || "http://127.0.0.1:12616";
+URL_ENGINES = URL_ENGINES + "/engines";
+URL_ALGORITHMS = URL_ENGINES + "/algrithms";
+URL_SERVICES = process.env.DMCLOUD_SERVICEPROXY_HOST || "http://127.0.0.1:12616";
+URL_SERVICES = URL_SERVICES + "/services";
 
 dchub.render = function(req, res, view, load){
   var data = {
@@ -228,6 +227,7 @@ app.use(URI_REPO + REPOID_TOKEN + '*', function(req, res, next) {
   req.repoId = req.params.repoId;
   next();
 });
+
 app.get(URI_REPO + REPOID_TOKEN, function(req, res, next) {
   dchub.repoRender(req, res, 'dashboard');
 });

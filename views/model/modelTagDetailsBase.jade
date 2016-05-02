@@ -7,11 +7,12 @@ block mainContent
       class= pageId == "TAG_META" ? "active" : "")
       a(href= URI_REPO + repoId + URI_MODELS + "/" + model.id + URI_TAGS + "/" + tag.id)
         = "Details"
-    li(
-      role="presentation"
-      class= pageId == "TAG_DATA" ? "active" : "")
-      a(href= URI_REPO + repoId + URI_MODELS + "/" + model.id + URI_TAGS + "/" + tag.id + "/data")
-        = "Data"
+    //
+      li(
+        role="presentation"
+        class= pageId == "TAG_DATA" ? "active" : "")
+        a(href= URI_REPO + repoId + URI_MODELS + "/" + model.id + URI_TAGS + "/" + tag.id + "/data")
+          = "Data"
     li(
       role="presentation"
       class= pageId == "TAG_USAGE" ? "active" : "")

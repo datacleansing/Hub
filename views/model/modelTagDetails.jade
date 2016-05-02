@@ -11,4 +11,9 @@ block tag_detail
       td
         p Data URI:
       td
-        p= tag.dataUri
+        a(href= tag.dataURI || "No data yet" )= tag.dataURI
+  br
+  a(
+    class='list-group-item'
+    href= URI_REPO + repoId + URI_MODELS + "/" + model.id + URI_TAGS + "/" + tag.id + "/uploader")
+      .text-center Upload Data

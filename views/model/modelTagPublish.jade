@@ -1,0 +1,21 @@
+extends base
+
+block content
+  .col-md-8
+    form(
+      action= publishUri
+      method="POST")
+      .form-group
+        span(class="glyphicon glyphicon-asterisk")
+        label(for="nameInput") Name:
+        input(
+          require="true"
+          type="text"
+          class="form-control"
+          name="name"
+          id="nameInput"
+          placeholder="Service's alias"
+          value= model.id + "-" + tag.id + "-Service")
+
+      include modelCommonForm.jade
+      button(type="submit" class="btn btn-default") Submit

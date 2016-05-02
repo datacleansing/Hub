@@ -14,7 +14,8 @@
     class="form-control"
     name="datatype"
     id="datatypeInput"
-    placeholder="Target data type")
+    placeholder="Target data type"
+    value= model? model.datatype : "")
 .form-group
   label(for="domainInput") Domain:
   input(
@@ -22,7 +23,8 @@
     class="form-control"
     name="domain"
     id="domainInput"
-    placeholder="Domain for the Model")
+    placeholder="Domain for the Model"
+    value= model? model.domain : "")
 .form-group
   label(for="localeInput") Locale:
   input(
@@ -31,7 +33,7 @@
     name="locale"
     id="localeInput"
     placeholder="Locale"
-    value="Global")
+    value= model? model.locale : "Global")
 .form-group
   label(for="localeInput") Description:
   textarea(
@@ -40,4 +42,4 @@
     row="6"
     name="description"
     id="localeInput"
-    placeholder="The model's details.")
+    value= model? model.description : "")

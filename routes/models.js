@@ -4,6 +4,10 @@ var request = require('request');
 
 MODEL_TOKEN="/:modelId"
 
+function getServicesURL(req){
+  return URL_SERVICES + "/" + req.repoId;
+}
+
 function getRepoModelsURL(req){
   return dchub.repo.baseUrl + "/" + req.repoId + URI_MODELS;
 }
@@ -18,6 +22,10 @@ function getRepoModelTagsURL(req){
 
 function getRepoModelTagURL(req){
   return getRepoModelTagsURL(req) + "/" + req.params.tagId;
+}
+
+function getRepoModelTagJobURL(req){
+  return dchub.repo.baseUrl + "/" + req.repoId + URI_MODEL_JOBS + "/" + req.params.modelId + URI_TAGS + "/" + req.params.tagId;
 }
 
 router.get('', function(req, res, next) {
@@ -93,7 +101,8 @@ router.get(MODEL_TOKEN + '/meta', function(req, res, next) {
   });
 });
 
-router.get(MODEL_TOKEN + URI_TAGS , function(req, res, next) {
+URI_MODEL_TAGS = MODEL_TOKEN + URI_TAGS;
+router.get(URI_MODEL_TAGS , function(req, res, next) {
   request(getRepoModelTagsURL(req), function (error, response, body) {
     var items = [];
     if (!error && response.statusCode == 200) {
@@ -108,24 +117,25 @@ router.get(MODEL_TOKEN + URI_TAGS , function(req, res, next) {
   });
 });
 
-router.all(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "*", function(req, res, next) {
+URI_MODEL_TAG = URI_MODEL_TAGS + TAG_TOKEN
+router.all(URI_MODEL_TAG + "*", function(req, res, next) {
   request(getRepoModelTagURL(req), function (error, response, body) {
-    var tag = null;
-    if (!error && response.statusCode == 200) {
-      tag = JSON.parse(body);
-    }else{
-      tag = {
-        "resourceId": req.modelObj.id,
-        "id": req.params.tagId,
-        "dataUri": ""
-      };
+    var tag = {
+      "resourceId": req.modelObj.id,
+      "id": req.params.tagId,
+      "dataUri": ""
+    };
+    if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
+      try{
+        tag = JSON.parse(body);
+      }catch(err){};
     }
     req.tagObj = tag;
     next();
   });
 });
 
-router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN, function(req, res, next) {
+router.get(URI_MODEL_TAG, function(req, res, next) {
   dchub.repoRender(req, res, 'model/modelTagDetails', {
     "pageId": "TAG_META",
     "model": req.modelObj,
@@ -133,7 +143,7 @@ router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN, function(req, res, next) {
   });
 });
 
-router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/data", function(req, res, next) {
+router.get(URI_MODEL_TAG + "/data", function(req, res, next) {
   dchub.repoRender(req, res, 'model/modelTagDataInfo', {
     "pageId": "TAG_DATA",
     "model": req.modelObj,
@@ -141,7 +151,7 @@ router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/data", function(req, res, next
   });
 });
 
-router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/usage", function(req, res, next) {
+router.get(URI_MODEL_TAG + "/usage", function(req, res, next) {
   dchub.repoRender(req, res, 'model/modelTagUsage', {
     "pageId": "TAG_USAGE",
     "model": req.modelObj,
@@ -149,8 +159,11 @@ router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/usage", function(req, res, nex
   });
 });
 
-router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/uploader", function(req, res, next) {
-  var tagUrl = URL_HUB + URI_REPO + req.repoId + URI_MODELS + "/" + req.modelObj.id + URI_TAGS + "/" + req.tagObj.id;
+function getHubModelTagUri(req){
+  return URI_REPO + req.repoId + URI_MODELS + "/" + req.modelObj.id + URI_TAGS + "/" + req.tagObj.id;
+}
+router.get(URI_MODEL_TAG + "/uploader", function(req, res, next) {
+  var tagUrl = URL_HUB + getHubModelTagUri(req);
   dchub.repoRender(req, res, 'model/modelTagDataUploader', {
     "model": req.modelObj,
     "tag": req.tagObj,
@@ -160,7 +173,41 @@ router.get(MODEL_TOKEN + URI_TAGS + TAG_TOKEN + "/uploader", function(req, res, 
   });
 });
 
-router.put(MODEL_TOKEN + URI_TAGS + TAG_TOKEN, function(req, res, next) {
+PUBLISH_TOKEN="/publish"
+URI_PUBLISH = URI_MODEL_TAG + PUBLISH_TOKEN;
+router.get(URI_PUBLISH, function(req, res, next) {
+  dchub.repoRender(req, res, 'model/modelTagPublish', {
+    "model": req.modelObj,
+    "tag": req.tagObj,
+    "publishUri": getHubModelTagUri(req) + PUBLISH_TOKEN
+  });
+});
+router.post(URI_PUBLISH, function(req, res, next) {
+  var svcRequest = {
+    jobUri: getRepoModelTagJobURL(req),
+    metadata: req.body
+  };
+  request.post(
+    getServicesURL(req),
+    {
+      "json": true,
+      "headers": {
+          "content-type": "application/json",
+      },
+      "body": svcRequest
+    },
+    function (error, response, body) {
+      console.log(response);
+      if (!error && response.statusCode == 201) {
+        var newSvc = body;
+        res.redirect(URI_SERVICES + req.repoId + "/" + newSvc.id);
+      }else {
+        res.redirect(URI_PUBLISH + "?code=" + response.statusCode);
+      }
+    });
+});
+
+router.put(URI_MODEL_TAG, function(req, res, next) {
   request.put(
     getRepoModelTagURL(req) + "",
     {
