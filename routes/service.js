@@ -15,7 +15,38 @@ router.get('', function(req, res, next) {
 });
 
 
-router.get('/:key', function(req, res, next) {
+
+PUBLISH_TOKEN="/publish"
+router.get(PUBLISH_TOKEN, function(req, res, next) {
+  dchub.repoRender(req, res, 'service/serviceCreator', {
+    "model": req.modelObj,
+    "tag": req.tagObj,
+    "publishUri": URI_SERVICES + PUBLISH_TOKEN
+  });
+});
+router.post(PUBLISH_TOKEN, function(req, res, next) {
+  var svcRequest = {
+    jobUri: getRepoModelTagJobURL(req),
+    metadata: req.body
+  };
+  request.post(
+    getServicesURL(req),
+    {
+      "json": true,
+      "headers": {
+          "content-type": "application/json",
+      },
+      "body": svcRequest
+    },
+    function (error, response, body) {
+      console.log(response);
+      if (!error && response.statusCode == 201) {
+        var newSvc = body;
+        res.redirect(URI_SERVICES + req.repoId + "/" + newSvc.id);
+      }else {
+        res.redirect(URI_PUBLISH + "?code=" + response.statusCode);
+      }
+    });
 });
 
 module.exports = router;

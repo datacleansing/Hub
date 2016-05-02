@@ -173,40 +173,6 @@ router.get(URI_MODEL_TAG + "/uploader", function(req, res, next) {
   });
 });
 
-PUBLISH_TOKEN="/publish"
-URI_PUBLISH = URI_MODEL_TAG + PUBLISH_TOKEN;
-router.get(URI_PUBLISH, function(req, res, next) {
-  dchub.repoRender(req, res, 'model/modelTagPublish', {
-    "model": req.modelObj,
-    "tag": req.tagObj,
-    "publishUri": getHubModelTagUri(req) + PUBLISH_TOKEN
-  });
-});
-router.post(URI_PUBLISH, function(req, res, next) {
-  var svcRequest = {
-    jobUri: getRepoModelTagJobURL(req),
-    metadata: req.body
-  };
-  request.post(
-    getServicesURL(req),
-    {
-      "json": true,
-      "headers": {
-          "content-type": "application/json",
-      },
-      "body": svcRequest
-    },
-    function (error, response, body) {
-      console.log(response);
-      if (!error && response.statusCode == 201) {
-        var newSvc = body;
-        res.redirect(URI_SERVICES + req.repoId + "/" + newSvc.id);
-      }else {
-        res.redirect(URI_PUBLISH + "?code=" + response.statusCode);
-      }
-    });
-});
-
 router.put(URI_MODEL_TAG, function(req, res, next) {
   request.put(
     getRepoModelTagURL(req) + "",
