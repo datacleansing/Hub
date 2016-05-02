@@ -152,7 +152,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 function handleAuthCallback(req, res){
-  res.redirect('/ui/');
+  res.redirect(URI_REPO + req.user.uid);
 };
 
 app.get('/auth/google', passport.authenticate('google', { scope: 'https://www.google.com/m8/feeds' }));
