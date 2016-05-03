@@ -1,13 +1,16 @@
 extends base
 
 block content
-  .col-md-7
-    table(
-      class="table table-hover"
-      id='servicesTable'
-    )
-      each val in services
-        tr
-          td
-            a(href= "/ui/services/" + val._id)
-              text= val.metadata.name
+  if services.length == 0
+    h5.text-center No service yet.
+  else
+    .col-md-7
+      table(
+        class="table table-hover"
+        id='servicesTable'
+      )
+        each val in services
+          tr
+            td
+              a(href= URI_SERVICES + val.repository + "/" + val.id)
+                text= val.id

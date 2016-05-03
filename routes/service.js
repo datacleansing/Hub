@@ -4,49 +4,43 @@ var request = require('request');
 
 router.get('', function(req, res, next) {
     var services = [];
-    request(dchub.servicesProxy.servicesUrl, function (error, response, body) {
+    request(URL_SERVICES + "/" + req.repoId, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         services = JSON.parse(body).items
       }else {
-        console.log("Failed to fetch services list for " + JSON.stringify(error));
+        console.log("Failed to fetch services list for " + JSON.stringify(response));
       }
-      dchub.render(req, res, 'service/services', { "services": services});
+      dchub.repoRender(req, res, 'service/services', { "services": services});
     });
 });
 
+router.all("/:svcId*", function(req, res, next) {
+    var service = {};
+    request(URL_SERVICES + "/" + req.repoId + "/" + req.params.svcId, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        service = JSON.parse(body);
+        req.svc = service;
+        next();
+      }else {
+        console.log("Failed to fetch services for " + JSON.stringify(response));
+        res.sendStatus(404)
+      }
+    });
+});
 
-
-PUBLISH_TOKEN="/publish"
-router.get(PUBLISH_TOKEN, function(req, res, next) {
-  dchub.repoRender(req, res, 'service/serviceCreator', {
-    "model": req.modelObj,
-    "tag": req.tagObj,
-    "publishUri": URI_SERVICES + PUBLISH_TOKEN
+router.get("/:svcId", function(req, res, next) {
+  dchub.repoRender(req, res, 'service/serviceDetail', {
+    "viewId": "SVC_META",
+    "service": req.svc
   });
 });
-router.post(PUBLISH_TOKEN, function(req, res, next) {
-  var svcRequest = {
-    jobUri: getRepoModelTagJobURL(req),
-    metadata: req.body
-  };
-  request.post(
-    getServicesURL(req),
-    {
-      "json": true,
-      "headers": {
-          "content-type": "application/json",
-      },
-      "body": svcRequest
-    },
-    function (error, response, body) {
-      console.log(response);
-      if (!error && response.statusCode == 201) {
-        var newSvc = body;
-        res.redirect(URI_SERVICES + req.repoId + "/" + newSvc.id);
-      }else {
-        res.redirect(URI_PUBLISH + "?code=" + response.statusCode);
-      }
-    });
+
+router.get("/:svcId/api", function(req, res, next) {
+  dchub.repoRender(req, res, 'service/serviceAPI', {
+    "viewId": "SVC_API",
+    "service": req.svc,
+    "api_url": URL_SERVICES + "/" + req.repoId + "/" + req.svc.id + "/api"
+  });
 });
 
 module.exports = router;

@@ -1,0 +1,14 @@
+extends base
+
+block content
+  .col-md-9
+    ul(class="nav nav-tabs")
+      li(
+        role="presentation"
+        class= viewId == "SVC_META" ? "active" : "")
+        a(href= URI_SERVICES + repoId + "/" + service.id) Details
+      li(
+        role="presentation"
+        class= viewId == "SVC_API" ? "active" : "")
+        a(href= URI_SERVICES + repoId + "/" + service.id + "/api") API
+    block service_detail

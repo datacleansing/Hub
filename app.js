@@ -17,27 +17,28 @@ dchub = {};
 
 URI_REPO = "/ui/repository/";
 URI_ALGORITHMS = "/ui/algorithms/";
-URI_SERVICES = "/ui/services/";
+URI_SERVICES = "/ui/service/";
 URI_EXPLORER = "/ui/explorer";
-URI_MODEL_JOBS="/modelJobs";
 URI_MODELS = "/models";
+URI_MODEL_JOBS = "/modelJobs";
+URI_JOBS = "/jobs";
 URI_TAGS = "/tags";
 URL_TAG_LATEST = URI_TAGS + "/latest";
 URI_NEW_MODEL = "/newModel";
+URI_NEW_SERVICE = "/newService";
 REPOID_TOKEN = ":repoId"
 TAG_TOKEN="/:tagId"
 
 URL_HUB = process.env.DMCLOUD_HUB_HOST || "http://127.0.0.1:8080";
-dchub.repo = {};
-dchub.repo.baseUrl = process.env.DMCLOUD_REPO_HOST || "http://127.0.0.1:12616";
-dchub.repo.baseUrl = dchub.repo.baseUrl + "/repository"
+URL_REPO = process.env.DMCLOUD_REPO_HOST || "http://127.0.0.1:12616";
+URL_REPO = URL_REPO + "/repository"
 URL_UPLOADER = process.env.DMCLOUD_FILEUPLOADER_HOST || "http://127.0.0.1:12616";
 URL_UPLOADER = URL_UPLOADER + "/fileUploader"
 URL_ENGINES = process.env.DMCLOUD_ENGINE_HOST || "http://127.0.0.1:12616";
-URL_ENGINES = URL_ENGINES + "/engines";
-URL_ALGORITHMS = URL_ENGINES + "/algrithms";
+URL_ENGINES = URL_ENGINES + "/engine";
+URL_ALGORITHMS = URL_ENGINES + "/algrithm";
 URL_SERVICES = process.env.DMCLOUD_SERVICEPROXY_HOST || "http://127.0.0.1:12616";
-URL_SERVICES = URL_SERVICES + "/services";
+URL_SERVICES = URL_SERVICES + "/service";
 
 dchub.render = function(req, res, view, load){
   var data = {
@@ -63,6 +64,7 @@ dchub.render = function(req, res, view, load){
 var index = require('./routes/index');
 var explorer = require('./routes/explorer');
 var models = require('./routes/models');
+var jobs = require('./routes/jobs');
 var services = require('./routes/service');
 var algorithms = require('./routes/algorithm');
 
@@ -201,7 +203,6 @@ app.use(function(req, res, next) {
 
 app.use('/', index);
 app.use(URI_ALGORITHMS, algorithms);
-app.use(URI_SERVICES, services);
 app.use(URI_EXPLORER, explorer);
 
 app.use(function(req, res, next) {
@@ -227,6 +228,18 @@ app.use(URI_REPO + REPOID_TOKEN + '*', function(req, res, next) {
   req.repoId = req.params.repoId;
   next();
 });
+app.use(URI_SERVICES + REPOID_TOKEN + '*', function(req, res, next) {
+  req.repoId = req.params.repoId;
+  next();
+});
+
+app.use(URI_SERVICES + REPOID_TOKEN , services);
+app.get(URI_SERVICES + REPOID_TOKEN + URI_NEW_SERVICE, function(req, res, next) {
+  dchub.repoRender(req, res, 'service/serviceCreator', {
+    "load": req.params,
+    "code": req.params ? req.params.code : null
+  });
+});
 
 app.get(URI_REPO + REPOID_TOKEN, function(req, res, next) {
   dchub.repoRender(req, res, 'dashboard');
@@ -237,7 +250,7 @@ app.get(URI_REPO + REPOID_TOKEN + URI_NEW_MODEL, function(req, res, next) {
     "code": req.params ? req.params.code : null
   });
 });
-
+app.use(URI_REPO + REPOID_TOKEN + URI_JOBS, jobs);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

@@ -9,7 +9,7 @@ function getServicesURL(req){
 }
 
 function getRepoModelsURL(req){
-  return dchub.repo.baseUrl + "/" + req.repoId + URI_MODELS;
+  return URL_REPO + "/" + req.repoId + URI_MODELS;
 }
 
 function getRepoModelURL(req){
@@ -24,8 +24,15 @@ function getRepoModelTagURL(req){
   return getRepoModelTagsURL(req) + "/" + req.params.tagId;
 }
 
+function getRepoModelTagURI(req){
+  return URI_REPO + req.repoId + URI_MODELS + "/" + req.params.modelId + URI_TAGS + "/" + req.params.tagId;
+}
+
+function getRepoModelTagJobURI(req){
+  return URI_REPO + req.repoId + URI_MODEL_JOBS + "/" + req.params.modelId + URI_TAGS + "/" + req.params.tagId;
+}
 function getRepoModelTagJobURL(req){
-  return dchub.repo.baseUrl + "/" + req.repoId + URI_MODEL_JOBS + "/" + req.params.modelId + URI_TAGS + "/" + req.params.tagId;
+  return URL_REPO + "/" + req.repoId + URI_MODEL_JOBS + "/" + req.params.modelId + URI_TAGS + "/" + req.params.tagId;
 }
 
 router.get('', function(req, res, next) {
@@ -34,7 +41,7 @@ router.get('', function(req, res, next) {
     if (!error && response.statusCode == 200) {
       models = JSON.parse(body).items
     }else {
-      console.log("Failed to fetch job list for " + JSON.stringify(error));
+      console.log("Failed to fetch model list for " + getRepoModelsURL(req));
     }
     dchub.repoRender(req, res, 'model/models', { "models": models});
   });
@@ -163,14 +170,60 @@ function getHubModelTagUri(req){
   return URI_REPO + req.repoId + URI_MODELS + "/" + req.modelObj.id + URI_TAGS + "/" + req.tagObj.id;
 }
 router.get(URI_MODEL_TAG + "/uploader", function(req, res, next) {
-  var tagUrl = URL_HUB + getHubModelTagUri(req);
+  var tagUrl = getHubModelTagUri(req);
   dchub.repoRender(req, res, 'model/modelTagDataUploader', {
     "model": req.modelObj,
     "tag": req.tagObj,
     "uploader_url": URL_UPLOADER,
     "tag_url": tagUrl,
-    "success_url" : tagUrl + "/data"
+    "success_url" : tagUrl// + "/data"
   });
+});
+
+
+PUBLISH_TOKEN="/publish"
+router.get(URI_MODEL_TAG + PUBLISH_TOKEN, function(req, res, next) {
+  dchub.repoRender(req, res, 'model/modelTagPublish', {
+    "model": req.modelObj,
+    "tag": req.tagObj,
+    "publishUri": getHubModelTagUri(req) + PUBLISH_TOKEN
+  });
+});
+router.post(URI_MODEL_TAG + PUBLISH_TOKEN, function(req, res, next) {
+  var svc = {
+    "jobURI": getRepoModelTagJobURL(req),
+    "reqository": req.repoId,
+    "id": req.body.name,
+    "description": req.description,
+    "datatype": req.modelObj.datatype,
+    "domain": req.modelObj.domain,
+    "locale": req.modelObj.locale,
+  };
+  request.put(
+    getRepoModelTagJobURL(req),
+    {
+      "body": req.body.algorithm
+    },
+    function (error, response, body) {
+      console.log(getServicesURL(req));
+      request.post(
+        getServicesURL(req),
+        {
+          "json": true,
+          "headers": {
+              "content-type": "application/json",
+          },
+          "body": svc
+        },
+        function (error, response, body) {
+          if (!error && response.statusCode == 201) {
+            var newSvc = body;
+            res.redirect(URI_SERVICES + req.repoId + "/" + newSvc.id);
+          }else {
+            res.redirect(getRepoModelTagURI(req) + PUBLISH_TOKEN + "?code=" + response.statusCode);
+          }
+        });
+    });
 });
 
 router.put(URI_MODEL_TAG, function(req, res, next) {

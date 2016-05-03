@@ -1,19 +1,14 @@
-extends base
+extends serviceDetailsBase
 
-block breadcrumb
-  li
-    a(href="/ui/services") Services
-  li= service.metadata.name
-
-block content
-  .col-md-9
-    ul(class="nav nav-tabs")
-      li(
-        role="presentation"
-        class= viewId == "service/meta" ? "active" : "")
-        a(href= "/ui/services/" + service._id) Details
-      li(
-        role="presentation"
-        class= viewId == "service/usage" ? "active" : "")
-        a(href= "/ui/services/" + service._id + "/usage") Usage
-    block service_detail
+block service_detail
+  table(class="table table-hover")
+    tr
+      td
+        p Name:
+      td
+        p= service.id
+    tr
+      td
+        p Job URI:
+      td
+        a(href= service.jobURI )= service.jobURI
