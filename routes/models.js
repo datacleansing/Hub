@@ -57,6 +57,7 @@ router.post('', function(req, res, next) {
         "domain": newSource.domain,
         "datatype": newSource.datatype,
         "locale": newSource.locale || "Global",
+        "algorithm": newSource.algorithm,
         "id": newSource.id
       }
       request.post(
@@ -69,6 +70,7 @@ router.post('', function(req, res, next) {
           "body": model
         },
         function (error, response, body) {
+          console.log(body);
           if (!error && response.statusCode == 201) {
             var newModel = body;
             res.redirect(URI_REPO + req.repoId + URI_MODELS + "/" + newModel.id);

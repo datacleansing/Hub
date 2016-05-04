@@ -9,6 +9,11 @@ block model_detail
         p= model.id
     tr
       td
+        p Algorithm:
+      td
+        p= algorithmsMap[model.algorithm].label
+    tr
+      td
         p Data Type:
       td
         p= model.datatype

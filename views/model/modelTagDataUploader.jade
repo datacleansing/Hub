@@ -14,7 +14,7 @@ block mainContent
     data-successUrl= success_url
     class="btn btn-default") Upload
 
-  #dataEditor
+  #dataEditor= algorithmsMap[model.algorithm].sampleData
 
 block actionContent
   div(class="panel panel-default")

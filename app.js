@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var request = require('request');
 
 var stylus = require('stylus');
 var nib = require('nib');
@@ -36,7 +37,6 @@ URL_UPLOADER = process.env.DMCLOUD_FILEUPLOADER_HOST || "http://127.0.0.1:12616"
 URL_UPLOADER = URL_UPLOADER + "/fileUploader"
 URL_ENGINES = process.env.DMCLOUD_ENGINE_HOST || "http://127.0.0.1:12618";
 URL_ENGINES = URL_ENGINES + "/engine";
-URL_ALGORITHMS = URL_ENGINES + "/algrithm";
 URL_SERVICES = process.env.DMCLOUD_SERVICEPROXY_HOST || "http://127.0.0.1:12616";
 URL_SERVICES = URL_SERVICES + "/service";
 
@@ -50,6 +50,7 @@ dchub.render = function(req, res, view, load){
     "URL_TAG_LATEST": URL_TAG_LATEST,
     "URI_NEW_MODEL": URI_NEW_MODEL,
     "REPOID_TOKEN": REPOID_TOKEN,
+    "algorithmsMap": algorithmsMap,
     "user": req.user,
     "view": view
   }
@@ -245,8 +246,22 @@ app.get(URI_REPO + REPOID_TOKEN, function(req, res, next) {
   dchub.repoRender(req, res, 'dashboard');
 });
 app.use(URI_REPO + REPOID_TOKEN + URI_MODELS, models);
+
+var algorithms = [];
+var algorithmsMap = {};
+request(URL_ENGINES, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    algorithms = JSON.parse(body)
+    for (alg of algorithms) {
+      algorithmsMap[alg.key] = alg;
+    }
+  }else {
+    console.log("Failed to fetch algorithms list for " + URL_SERVICES);
+  }
+});
 app.get(URI_REPO + REPOID_TOKEN + URI_NEW_MODEL, function(req, res, next) {
   dchub.repoRender(req, res, 'model/modelCreator', {
+    "algorithms": algorithms,
     "code": req.params ? req.params.code : null
   });
 });

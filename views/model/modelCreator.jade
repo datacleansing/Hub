@@ -15,6 +15,19 @@ block content
           name="id"
           id="nameInput"
           placeholder="Unique Name in the Repository")
+      .form-group
+        span(class="glyphicon glyphicon-asterisk")
+        label(for="algorithmInput") Algorithm:
+        select(
+          require="true"
+          class="form-control"
+          name="algorithm"
+          id="algorithmInput"
+          placeholder="The algorithm which use this model")
+          each val in algorithms
+            option(
+              value= val.key
+              )= val.label
 
       include ../commonForm.jade
       button(type="submit" class="btn btn-default") Submit
